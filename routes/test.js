@@ -43,7 +43,7 @@ const router = express.Router();
  * @swagger
  * /api/test/image:
  *  post:
- *    decription: hello route
+ *    summary: upload an image
  *    tags:
  *      - s3 bucket
  *    parameters:
