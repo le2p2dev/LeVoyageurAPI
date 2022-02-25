@@ -6,6 +6,11 @@ module.exports = (sequelize, Datatypes) => {
       endDate: Datatypes.DATEONLY,
     });
   
+    Trip.associate = function (models) {
+      models.Trip.hasOne(models.Marker);
+      models.Trip.hasMany(models.Step)
+    };
+
     return Trip;
   };
   
