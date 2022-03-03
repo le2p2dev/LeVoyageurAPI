@@ -105,9 +105,6 @@ router.get("/find/", (req, res) => {
  */
 router.post("/create", (req, res) => {
   if (
-    req.body.pinNumber &&
-    req.body.Title &&
-    req.body.Description &&
     req.body.Latitude &&
     req.body.Longitude
   ) {
@@ -115,9 +112,10 @@ router.post("/create", (req, res) => {
       pinNumber: req.body.pinNumber,
       title: req.body.Title,
       description: req.body.Description,
-
       latitude: req.body.Latitude,
       longitude: req.body.Longitude,
+      StepId: req.body.StepId,
+      TripId: req.body.TripId
     }).then((dataSubmited) => {
       res.send({
         statut: 200,

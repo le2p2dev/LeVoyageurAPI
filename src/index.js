@@ -37,6 +37,7 @@ const routeMarker = require("../routes/marker.js");
 const routeTest = require("../routes/test.js");
 const routeSecurity = require("../routes/security.js");
 const routeTrip = require("../routes/trip.js");
+const routeStep = require("../routes/step")
 const s3Bucket = require("./s3.js");
 
 //consts
@@ -49,6 +50,7 @@ app.use("/", routeSecurity);
 app.use("/api/test", routeTest);
 app.use("/api/marker", routeMarker);
 app.use("/api/trip", routeTrip);
+app.use("/api/step", routeStep)
 
 /*
 Code below is used to check for token and securise all routes
