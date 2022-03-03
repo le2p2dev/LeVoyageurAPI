@@ -1,9 +1,9 @@
 {
   "development": {
-    "username": "root",
-    "password": "root",
+    "username": "leVoyageurDev",
+    "password": "voyageur123",
     "database": "leVoyageur",
-    "host": "localhost",
+    "host": "mc.outronic.fr",
     "dialect": "mysql"
   },
   "test": {
