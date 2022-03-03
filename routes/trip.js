@@ -88,10 +88,13 @@ router.get("/find", (req, res) => {
  *        description: OK
  */
 router.post("/create", (req, res) => {
-  if (req.body.tripName && req.body.description) {
+  if (req.body.TripName && req.body.Description) {
     db.Trip.create({
-      tripName: req.body.tripName,
-      description: req.body.description,
+      tripName: req.body.TripName,
+      description: req.body.Description,
+      startDate: req.body.StartDate,
+      endDate: req.body.EndDate,
+      order: req.body.Order
     }).then((dataSubmited) => {
       res.send({
         statut: 200,
