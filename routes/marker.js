@@ -181,4 +181,27 @@ router.put("/edit", (req, res) => {
   res.status(404).send("Method not allowed atm");
 });
 
+router.get("/findbytrip/", (req, res) => {
+  const queryParm = req.query;
+  console.log(queryParm)
+
+  if (queryParm.id) {
+    db.Marker.findAll({
+      where: {
+        TripId: queryParm.id,
+      },
+    }).then((data) => {
+      res.send({
+        status: 200,
+        response: data,
+      });
+    });
+  } else {
+    res.status(406).send({
+      status: 406,
+      response: "problem occured",
+    });
+  }
+});
+
 module.exports = router;
