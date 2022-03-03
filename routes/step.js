@@ -6,6 +6,17 @@ const { route } = require("./test");
 //définition du router
 const router = express.Router();
 
+/**
+ * @swagger
+ * /api/step/all:
+ *  get:
+ *    summary: get all steps
+ *    tags:
+ *      - Step
+ *    responses:
+ *      '200':
+ *        description: OK
+ */
 router.get("/all", (req, res) => {
     db.Step.findAll().then((data) => {
       res.send({
@@ -15,6 +26,23 @@ router.get("/all", (req, res) => {
     });
 });
 
+/**
+ * @swagger
+ * /api/step/find:
+ *    get:
+ *      summary: get step by id
+ *      tags:
+ *        - Step
+ *      parameters:
+ *        - name : id
+ *          type: integer
+ *          in: query
+ *          description: id of the step
+ *      responses:
+ *        '200':
+ *          description: OK
+ *
+ */
 router.get("/find", (req, res) => {
     const queryParm = req.query;
   
@@ -37,6 +65,23 @@ router.get("/find", (req, res) => {
     }
 });
 
+/**
+ * @swagger
+ * /api/step/delete/{id}:
+ *  delete:
+ *    summary: delete step by id
+ *    tags:
+ *      - Step
+ *    parameters:
+ *      - name : id
+ *        in: formData
+ *        required: true
+ *        type: integer
+ *        description: description de l'id
+ *    responses:
+ *      '200':
+ *        description: OK
+ */
 router.delete("/delete/:id", (req, res) => {
     if (req.body.id) {
       db.Step.destroy({
@@ -52,17 +97,54 @@ router.delete("/delete/:id", (req, res) => {
     }
 });
 
+/**
+ * @swagger
+ * /api/step/create:
+ *  post:
+ *    summary: create a new step
+ *    tags:
+ *      - Step
+ *    parameters:
+ *      - name : StepName
+ *        description : name of the step
+ *        in: formData
+ *        type: string
+ *        required: true
+ *     - name : TripId
+ *        description : id of the trip
+ *        in: formData
+ *        type: int
+ *        required: true
+ *     - name : StartDate
+ *        description : start date of the step
+ *        in: formData
+ *        type: date
+ *        required: false
+ *     - name : EndDate
+ *        description : end date of the step
+ *        in: formData
+ *        type: date
+ *        required: false
+ *     - name : Order
+ *        description : order of the step in the trip
+ *        in: formData
+ *        type: int
+ *        required: false
+ *    responses:
+ *      '200':
+ *        description: OK
+ */
 router.post("/create", (req, res) => {
     if (
-        req.body.StepName &&
-        req.body.TripId
+        req.body.stepName &&
+        req.body.tripId
     ) {
       db.Step.create({
-        stepName: req.body.StepName,
-        startDate: req.body.StartDate,
-        endDate: req.body.EndDate,
-        TripId: req.body.TripId,
-        order: req.body.Order
+        stepName: req.body.stepName,
+        startDate: req.body.startDate,
+        endDate: req.body.endDate,
+        tripId: req.body.tripId,
+        order: req.body.order
       }).then((dataSubmited) => {
         res.send({
           statut: 200,

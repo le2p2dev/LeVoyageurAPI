@@ -76,46 +76,55 @@ router.get("/find/", (req, res) => {
  *        description: number of the pin
  *        in: formData
  *        type: integer
- *        required: true
- *      - name: Title
+ *        required: false
+ *      - name: title
  *        description : title of the pin
  *        in: formData
  *        type: string
  *        required: true
- *      - name: Description
+ *      - name: description
  *        description : description of the pin
  *        in: formData
  *        type: string
- *        required: true
- *      - name: Latitude
+ *        required: false
+ *      - name: latitude
  *        description: Latitude of the pin
  *        in: formData
  *        type: number
  *        required: true
- *      - name: Longitude
+ *      - name: longitude
  *        description: Longitude
  *        in: formData
  *        type: number
  *        required: true
- *
+ *      - name: stepId
+ *        description: step id of the marker
+ *        in: formData
+ *        type: number
+ *        required: false
+ *      - name: tripId
+ *        description: trip id of the marker
+ *        in: formData
+ *        type: number
+ *        required: false
  *      responses:
  *        "200":
  *          descirption: OK
- *
  */
 router.post("/create", (req, res) => {
   if (
-    req.body.Latitude &&
-    req.body.Longitude
+    req.body.latitude &&
+    req.body.longitude &&
+    req.body.title
   ) {
     db.Marker.create({
       pinNumber: req.body.pinNumber,
-      title: req.body.Title,
-      description: req.body.Description,
-      latitude: req.body.Latitude,
-      longitude: req.body.Longitude,
-      StepId: req.body.StepId,
-      TripId: req.body.TripId
+      title: req.body.title,
+      description: req.body.description,
+      latitude: req.body.latitude,
+      longitude: req.body.longitude,
+      StepId: req.body.stepId,
+      TripId: req.body.tripId
     }).then((dataSubmited) => {
       res.send({
         statut: 200,
@@ -181,9 +190,23 @@ router.put("/edit", (req, res) => {
   res.status(404).send("Method not allowed atm");
 });
 
+/**
+ * @swagger
+ * /api/marker/findbytrip:
+ *  get:
+ *    tags :
+ *      - Marker
+ *    decription: get a marker by id
+ *    parameters:
+ *      - name: idTrip
+ *        description: id of the trip
+ *        in: query
+ *    responses:
+ *      '200':
+ *        description: Success
+ */
 router.get("/findbytrip/", (req, res) => {
   const queryParm = req.query;
-  console.log(queryParm)
 
   if (queryParm.id) {
     db.Marker.findAll({

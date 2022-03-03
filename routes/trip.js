@@ -73,12 +73,12 @@ router.get("/find", (req, res) => {
  *    tags:
  *      - Trip
  *    parameters:
- *      - name : tripName
+ *      - name : TripName
  *        description : name of the trip
  *        in: formData
  *        type: string
  *        required: true
- *      - name : description
+ *      - name : Description
  *        in: formData
  *        description: description of the trip
  *        type: string
@@ -88,13 +88,16 @@ router.get("/find", (req, res) => {
  *        description: OK
  */
 router.post("/create", (req, res) => {
-  if (req.body.TripName && req.body.Description) {
+  if (
+    req.body.tripName && 
+    req.body.description
+  ){
     db.Trip.create({
-      tripName: req.body.TripName,
-      description: req.body.Description,
-      startDate: req.body.StartDate,
-      endDate: req.body.EndDate,
-      order: req.body.Order
+      tripName: req.body.tripName,
+      description: req.body.description,
+      startDate: req.body.startDate,
+      endDate: req.body.endDate,
+      order: req.body.order
     }).then((dataSubmited) => {
       res.send({
         statut: 200,
