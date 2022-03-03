@@ -90,14 +90,14 @@ router.get("/find", (req, res) => {
 router.post("/create", (req, res) => {
   if (
     req.body.tripName && 
-    req.body.Description
+    req.body.description
   ){
     db.Trip.create({
-      tripName: req.body.TripName,
-      description: req.body.Description,
-      startDate: req.body.StartDate,
-      endDate: req.body.EndDate,
-      order: req.body.Order
+      tripName: req.body.tripName,
+      description: req.body.description,
+      startDate: req.body.startDate,
+      endDate: req.body.endDate,
+      order: req.body.order
     }).then((dataSubmited) => {
       res.send({
         statut: 200,
