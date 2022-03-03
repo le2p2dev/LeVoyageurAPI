@@ -5,6 +5,7 @@ module.exports = (sequelize, Datatypes) => {
     description: Datatypes.STRING,
     latitude: Datatypes.FLOAT,
     longitude: Datatypes.FLOAT,
+    category: Datatypes.STRING
   });
 
   return Marker;

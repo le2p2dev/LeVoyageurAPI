@@ -105,9 +105,6 @@ router.get("/find/", (req, res) => {
  */
 router.post("/create", (req, res) => {
   if (
-    req.body.pinNumber &&
-    req.body.Title &&
-    req.body.Description &&
     req.body.Latitude &&
     req.body.Longitude
   ) {
@@ -115,9 +112,10 @@ router.post("/create", (req, res) => {
       pinNumber: req.body.pinNumber,
       title: req.body.Title,
       description: req.body.Description,
-
       latitude: req.body.Latitude,
       longitude: req.body.Longitude,
+      StepId: req.body.StepId,
+      TripId: req.body.TripId
     }).then((dataSubmited) => {
       res.send({
         statut: 200,
@@ -181,6 +179,29 @@ router.delete("/delete/:id", (req, res) => {
  */
 router.put("/edit", (req, res) => {
   res.status(404).send("Method not allowed atm");
+});
+
+router.get("/findbytrip/", (req, res) => {
+  const queryParm = req.query;
+  console.log(queryParm)
+
+  if (queryParm.id) {
+    db.Marker.findAll({
+      where: {
+        TripId: queryParm.id,
+      },
+    }).then((data) => {
+      res.send({
+        status: 200,
+        response: data,
+      });
+    });
+  } else {
+    res.status(406).send({
+      status: 406,
+      response: "problem occured",
+    });
+  }
 });
 
 module.exports = router;
