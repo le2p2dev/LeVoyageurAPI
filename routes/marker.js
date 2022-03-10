@@ -112,11 +112,7 @@ router.get("/find/", (req, res) => {
  *          descirption: OK
  */
 router.post("/create", (req, res) => {
-  if (
-    req.body.latitude &&
-    req.body.longitude &&
-    req.body.title
-  ) {
+  if (req.body.latitude && req.body.longitude && req.body.title) {
     db.Marker.create({
       pinNumber: req.body.pinNumber,
       title: req.body.title,
@@ -124,7 +120,7 @@ router.post("/create", (req, res) => {
       latitude: req.body.latitude,
       longitude: req.body.longitude,
       StepId: req.body.stepId,
-      TripId: req.body.tripId
+      TripId: req.body.tripId,
     }).then((dataSubmited) => {
       res.send({
         statut: 200,
@@ -178,7 +174,7 @@ router.delete("/delete/:id", (req, res) => {
  * paths:
  *  /edit:
  *    put:
- *      summary: change new marker [not working atm !]
+ *      summary: change new marker [not usable !]
  *      tags:
  *        - Marker
  *      responses:
