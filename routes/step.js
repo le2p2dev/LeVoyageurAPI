@@ -8,27 +8,82 @@ const router = express.Router();
 
 /**
  * @swagger
- * /api/step/all:
+ * /api/step:
+ *  post:
+ *    summary: create a new step
+ *    tags:
+ *      - Step
+ *    parameters:
+ *      - name : title
+ *        description : title of the step
+ *        in: formData
+ *        type: string
+ *        required: true
+ *      - name: description
+ *        description: description of the step
+ *        in: formaData
+ *        type: string
+ *        required: false
+ *      - name : duration
+ *        description: duration of the step
+ *        in : formData
+ *        type: integer
+ *        required: false
+ *      - name : tripId
+ *        description: id of the trip which the step is attached
+ *        in : formData
+ *        type: integer
+ *        required: false
+ *    responses:
+ *      '200':
+ *        description: OK
+ */
+ router.post("/", (req, res) => {
+  if (
+    req.body.title
+  ){
+    db.Step.create({
+      title: req.body.title,
+      description: req.body.description,
+      duration: req.body.duration,
+      TripId: req.body.tripId
+    }).then((dataSubmited) => {
+      res.send({
+        statut: 200,
+        response: dataSubmited,
+      });
+    });
+  } else {
+    res.status(406).send({
+      status: 406,
+      response: "problem occured",
+    });
+  }
+});
+
+/**
+ * @swagger
+ * /api/step:
  *  get:
- *    summary: get all steps
+ *    summary: get all trips
  *    tags:
  *      - Step
  *    responses:
  *      '200':
  *        description: OK
  */
-router.get("/all", (req, res) => {
-    db.Step.findAll().then((data) => {
-      res.send({
-        status: 200,
-        response: data,
-      });
+ router.get("/", (req, res) => {
+  db.Trip.findAll().then((data) => {
+    res.send({
+      status: 200,
+      response: data,
     });
+  });
 });
 
 /**
  * @swagger
- * /api/step/find:
+ * /api/step/:{id} :
  *    get:
  *      summary: get step by id
  *      tags:
@@ -36,38 +91,39 @@ router.get("/all", (req, res) => {
  *      parameters:
  *        - name : id
  *          type: integer
- *          in: query
+ *          in: params
  *          description: id of the step
+ *          required : true
  *      responses:
  *        '200':
  *          description: OK
  *
  */
-router.get("/find", (req, res) => {
-    const queryParm = req.query;
-  
-    if (queryParm.id) {
-      db.Step.findAll({
-        where: {
-          id: queryParm.id,
-        },
-      }).then((data) => {
-        res.send({
-          status: 200,
-          response: data,
-        });
+ router.get("/:id", (req, res) => {
+  const queryParm = req.params;
+
+  if (queryParm.id) {
+    db.Step.findAll({
+      where: {
+        id: queryParm.id,
+      },
+    }).then((data) => {
+      res.send({
+        status: 200,
+        response: data,
       });
-    } else {
-      res.status(406).send({
-        status: 406,
-        response: "problem occured",
-      });
-    }
+    });
+  } else {
+    res.status(406).send({
+      status: 406,
+      response: "problem occured",
+    });
+  }
 });
 
 /**
  * @swagger
- * /api/step/delete/{id}:
+ * /api/step/{id} :
  *  delete:
  *    summary: delete step by id
  *    tags:
@@ -77,86 +133,64 @@ router.get("/find", (req, res) => {
  *        in: formData
  *        required: true
  *        type: integer
- *        description: description de l'id
+ *        description: id of the step who want delete
  *    responses:
  *      '200':
  *        description: OK
  */
-router.delete("/delete/:id", (req, res) => {
-    if (req.body.id) {
-      db.Step.destroy({
-        where: {
-          id: req.body.id,
-        },
-      }).then(() => {
-        res.send({
-          status: 200,
-          response: "success",
-        });
+router.delete("/:id", (req, res) => {
+  if (req.body.id) {
+    db.Step.destroy({
+      where: {
+        id: req.body.id,
+      },
+    }).then(() => {
+      res.send({
+        status: 200,
+        response: "success",
       });
-    }
+    });
+  }
 });
 
 /**
  * @swagger
- * /api/step/create:
- *  post:
- *    summary: create a new step
- *    tags:
- *      - Step
- *    parameters:
- *      - name : StepName
- *        description : name of the step
- *        in: formData
- *        type: string
- *        required: true
- *     - name : TripId
- *        description : id of the trip
- *        in: formData
- *        type: int
- *        required: true
- *     - name : StartDate
- *        description : start date of the step
- *        in: formData
- *        type: date
- *        required: false
- *     - name : EndDate
- *        description : end date of the step
- *        in: formData
- *        type: date
- *        required: false
- *     - name : Order
- *        description : order of the step in the trip
- *        in: formData
- *        type: int
- *        required: false
- *    responses:
- *      '200':
- *        description: OK
+ * /api/step/trip/:{tripId} :
+ *    get:
+ *      summary: get all step by tripId
+ *      tags:
+ *        - Step
+ *      parameters:
+ *        - name : tripId
+ *          type: integer
+ *          in: params
+ *          description: id of the trip who want all step
+ *          required : true
+ *      responses:
+ *        '200':
+ *          description: OK
+ *
  */
-router.post("/create", (req, res) => {
-    if (
-        req.body.stepName &&
-        req.body.tripId
-    ) {
-      db.Step.create({
-        stepName: req.body.stepName,
-        startDate: req.body.startDate,
-        endDate: req.body.endDate,
-        tripId: req.body.tripId,
-        order: req.body.order
-      }).then((dataSubmited) => {
-        res.send({
-          statut: 200,
-          response: dataSubmited,
-        });
+ router.get("/trip/:tripId", (req, res) => {
+  const queryParm = req.params;
+
+  if (queryParm.tripId) {
+    db.Trip.findAll({
+      where: {
+        TripId: queryParm.tripId,
+      },
+    }).then((data) => {
+      res.send({
+        status: 200,
+        response: data,
       });
-    } else {
-      res.status(406).send({
-        status: 406,
-        response: "problem occured",
-      });
-    }
-  });
-  
+    });
+  } else {
+    res.status(406).send({
+      status: 406,
+      response: "problem occured",
+    });
+  }
+});
+
 module.exports = router;
