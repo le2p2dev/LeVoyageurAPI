@@ -2,9 +2,65 @@ const express = require("express");
 const bodyParser = require("body-parser");
 const db = require("../models");
 const { route } = require("./test");
+const { query } = require("express");
 
 //définition du router
 const router = express.Router();
+
+/**
+ * @swagger
+ * /api/trip/create:
+ *  post:
+ *    summary: create a new trip
+ *    tags:
+ *      - Trip
+ *    parameters:
+ *      - name : title
+ *        description : name of the trip
+ *        in: formData
+ *        type: string
+ *        required: true
+ *      - name : description
+ *        description : description of the trip
+ *        in: formData
+ *        type: string
+ *        required: false
+ *      - name : backgroundUrl
+ *        description : url of the background image of the trip
+ *        in : formData
+ *        type : string
+ *        required: false
+ *      - name : startDate
+ *        description : start date of the trip
+ *        in : formData
+ *        type : date
+ *        required : false
+ *    responses:
+ *      '200':
+ *        description: OK
+ */
+router.post("/create", (req, res) => {
+  if (
+    req.body.title
+  ){
+    db.Trip.create({
+      title: req.body.title,
+      description: req.body.description,
+      backgroundUrl: req.body.backgroundUrl,
+      startDate: req.body.startDate
+    }).then((dataSubmited) => {
+      res.send({
+        statut: 200,
+        response: dataSubmited,
+      });
+    });
+  } else {
+    res.status(406).send({
+      status: 406,
+      response: "problem occured",
+    });
+  }
+});
 
 /**
  * @swagger
@@ -17,7 +73,7 @@ const router = express.Router();
  *      '200':
  *        description: OK
  */
-router.get("/all", (req, res) => {
+ router.get("/all", (req, res) => {
   db.Trip.findAll().then((data) => {
     res.send({
       status: 200,
@@ -28,7 +84,7 @@ router.get("/all", (req, res) => {
 
 /**
  * @swagger
- * /api/trip/find:
+ * /api/trip/find/:{id} :
  *    get:
  *      summary: get trip by id
  *      tags:
@@ -36,18 +92,18 @@ router.get("/all", (req, res) => {
  *      parameters:
  *        - name : id
  *          type: integer
- *          in: query
+ *          in: params
  *          description: id of the trip
  *      responses:
  *        '200':
  *          description: OK
  *
  */
-router.get("/find", (req, res) => {
-  const queryParm = req.query;
+ router.get("/find/:id", (req, res) => {
+  const queryParm = req.params;
 
   if (queryParm.id) {
-    db.Trip.findAll({
+    db.Step.findAll({
       where: {
         id: queryParm.id,
       },
@@ -67,54 +123,7 @@ router.get("/find", (req, res) => {
 
 /**
  * @swagger
- * /api/trip/create:
- *  post:
- *    summary: create a new trip
- *    tags:
- *      - Trip
- *    parameters:
- *      - name : TripName
- *        description : name of the trip
- *        in: formData
- *        type: string
- *        required: true
- *      - name : Description
- *        in: formData
- *        description: description of the trip
- *        type: string
- *        required: true
- *    responses:
- *      '200':
- *        description: OK
- */
-router.post("/create", (req, res) => {
-  if (
-    req.body.tripName && 
-    req.body.description
-  ){
-    db.Trip.create({
-      tripName: req.body.tripName,
-      description: req.body.description,
-      startDate: req.body.startDate,
-      endDate: req.body.endDate,
-      order: req.body.order
-    }).then((dataSubmited) => {
-      res.send({
-        statut: 200,
-        response: dataSubmited,
-      });
-    });
-  } else {
-    res.status(406).send({
-      status: 406,
-      response: "problem occured",
-    });
-  }
-});
-
-/**
- * @swagger
- * /api/trip/delete/{id}:
+ * /api/trip/delete/{id} :
  *  delete:
  *    summary: delete trip by id
  *    tags:
@@ -129,7 +138,7 @@ router.post("/create", (req, res) => {
  *      '200':
  *        description: OK
  */
-router.delete("/delete/:id", (req, res) => {
+  router.delete("/delete/:id", (req, res) => {
   if (req.body.id) {
     db.Trip.destroy({
       where: {
@@ -143,5 +152,7 @@ router.delete("/delete/:id", (req, res) => {
     });
   }
 });
+
+
 
 module.exports = router;
