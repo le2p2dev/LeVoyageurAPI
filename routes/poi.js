@@ -9,11 +9,11 @@ const router = express.Router();
 
 /**
  * @swagger
- * /api/trip:
+ * /api/poi:
  *  post:
- *    summary: create a new trip
+ *    summary: create a new point of interest
  *    tags:
- *      - Trip
+ *      - Point Of Interest
  *    parameters:
  *      - name : title
  *        description : title of the trip
@@ -25,15 +25,30 @@ const router = express.Router();
  *        in: formData
  *        type: string
  *        required: false
- *      - name : backgroundUrl
- *        description : url of the background image of the trip
+ *      - name : longitude
+ *        description : longitude of the poi
  *        in : formData
- *        type : string
- *        required: false
- *      - name : startDate
- *        description : start date of the trip
+ *        type : double
+ *        required: true
+ *      - name : latitude
+ *        description : latitude of the poi
  *        in : formData
- *        type : date
+ *        type : double
+ *        required : true
+ *      - name : poiType
+ *        description : type of the poi
+ *        in : formData
+ *        type : integer
+ *        required : true
+ *      - name : tripId
+ *        description : id of the trip which the poi is attached
+ *        in : formData
+ *        type : integer
+ *        required : false
+ *      - name : stepId
+ *        description : id of the step which the poi is attached
+ *        in : formData
+ *        type : integer
  *        required : false
  *    responses:
  *      '200':
@@ -41,13 +56,15 @@ const router = express.Router();
  */
 router.post("/", (req, res) => {
   if (
+    req.body.latitude,
+    req.body.longitude,
     req.body.title
   ){
     db.Trip.create({
       title: req.body.title,
       description: req.body.description,
-      backgroundUrl: req.body.backgroundUrl,
-      startDate: req.body.startDate
+      latitude: req.body.latitude,
+      longitude: req.body.longitude,
     }).then((dataSubmited) => {
       res.send({
         statut: 200,
@@ -64,17 +81,17 @@ router.post("/", (req, res) => {
 
 /**
  * @swagger
- * /api/trip:
+ * /api/poi:
  *  get:
- *    summary: get all trips
+ *    summary: get all pois
  *    tags:
- *      - Trip
+ *      - Point Of Interest
  *    responses:
  *      '200':
  *        description: OK
  */
 router.get("/", (req, res) => {
-  db.Trip.findAll().then((data) => {
+  db.Poi.findAll().then((data) => {
     res.send({
       status: 200,
       response: data,
@@ -84,16 +101,16 @@ router.get("/", (req, res) => {
 
 /**
  * @swagger
- * /api/trip/:{id} :
+ * /api/poi/:{id} :
  *    get:
- *      summary: get trip by id
+ *      summary: get poi by id
  *      tags:
- *        - Trip
+ *        - Point Of Interest
  *      parameters:
  *        - name : id
  *          type: integer
  *          in: params
- *          description: id of the trip
+ *          description: id of the poi
  *          required : true
  *      responses:
  *        '200':
@@ -104,7 +121,7 @@ router.get("/:id", (req, res) => {
   const queryParm = req.params;
 
   if (queryParm.id) {
-    db.Trip.findAll({
+    db.Poi.findAll({
       where: {
         id: queryParm.id,
       },
@@ -124,24 +141,64 @@ router.get("/:id", (req, res) => {
 
 /**
  * @swagger
- * /api/trip/{id} :
+ * /api/poi/trip/:{tripId} :
+ *    get:
+ *      summary: get all poi by tripId
+ *      tags:
+ *        - Point Of Interest
+ *      parameters:
+ *        - name : tripId
+ *          type: integer
+ *          in: params
+ *          description: id of the trip who want all pooi
+ *          required : true
+ *      responses:
+ *        '200':
+ *          description: OK
+ */
+ router.get("/trip/:tripId", (req, res) => {
+  const queryParm = req.params;
+
+  if (queryParm.tripId) {
+    db.Trip.findAll({
+      where: {
+        TripId: queryParm.tripId,
+      },
+    }).then((data) => {
+      res.send({
+        status: 200,
+        response: data,
+      });
+    });
+  } else {
+    res.status(406).send({
+      status: 406,
+      response: "problem occured",
+    });
+  }
+});
+
+
+/**
+ * @swagger
+ * /api/poi/{id} :
  *  delete:
- *    summary: delete trip by id
+ *    summary: delete poi by id
  *    tags:
- *      - Trip
+ *      - Point Of Interest
  *    parameters:
  *      - name : id
  *        in: formData
  *        required: true
  *        type: integer
- *        description: description de l'id
+ *        description: id of the poi
  *    responses:
  *      '200':
  *        description: OK
  */
 router.delete("/:id", (req, res) => {
   if (req.body.id) {
-    db.Trip.destroy({
+    db.Poi.destroy({
       where: {
         id: req.body.id,
       },
