@@ -1,14 +1,9 @@
 module.exports = (sequelize, Datatypes) => {
     const Step = sequelize.define("Step", {
-        stepName: Datatypes.STRING,
-        startDate: Datatypes.DATEONLY,
-        endDate: Datatypes.DATEONLY,
-        order: Datatypes.INTEGER
+        title: Datatypes.STRING,
+        description: Datatypes.DATEONLY,
+        duration: Datatypes.DATEONLY,
     });
     
-    Step.associate = function (models) {
-        models.Step.hasOne(models.Marker);
-    };
-
     return Step
 }
