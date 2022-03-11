@@ -60,7 +60,7 @@ router.post("/", (req, res) => {
     req.body.longitude,
     req.body.title
   ){
-    db.Trip.create({
+    db.Poi.create({
       title: req.body.title,
       description: req.body.description,
       latitude: req.body.latitude,
