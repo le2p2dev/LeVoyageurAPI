@@ -18,7 +18,7 @@ router.post("/whoami", async (req, res) => {
  *      - Security
  *    decription: login route
  *    parameters:
- *      - name: email
+ *      - name: username
  *        description: user's email
  *        in: formData
  *        type: string
@@ -77,10 +77,10 @@ router.post("/login", async (req, res) => {
  *    tags:
  *      - Security
  *    parameters:
- *      - name : email
+ *      - name : username
  *        type: string
  *        required: true
- *        description: user's email
+ *        description: user's username
  *        in: formData
  *      - name: password
  *        type: string
