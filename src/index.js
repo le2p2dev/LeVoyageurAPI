@@ -20,7 +20,7 @@ const swaggerOptions = {
       servers: ["http://localhost:3630/"],
     },
   },
-  apis: [`src/index.js`, `routes/*.js`],
+  apis: [`src/index.js`, `../routes/*.js`],
 };
 const swaggerDocs = swaggerJsDoc(swaggerOptions);
 app.use("/doc", swaggerUI.serve, swaggerUI.setup(swaggerDocs));
@@ -33,8 +33,7 @@ const dotenv = require("dotenv").config();
 /**
  * routes crée
  */
-const routeMarker = require("../routes/marker.js");
-const routeTest = require("../routes/test.js");
+//const routeTest = require("../routes/test.js");
 const routeSecurity = require("../routes/security.js");
 const routeTrip = require("../routes/trip.js");
 const routeStep = require("../routes/step")
@@ -48,7 +47,6 @@ app.use(bodyParser.json());
 
 app.use("/", routeSecurity);
 app.use("/api/test", routeTest);
-app.use("/api/marker", routeMarker);
 app.use("/api/trip", routeTrip);
 app.use("/api/step", routeStep)
 
