@@ -36,7 +36,8 @@ const dotenv = require("dotenv").config();
 const routeTest = require("../routes/test.js");
 const routeSecurity = require("../routes/security.js");
 const routeTrip = require("../routes/trip.js");
-const routeStep = require("../routes/step")
+const routeStep = require("../routes/step.js");
+const routePoi = require("../routes/poi.js");
 const s3Bucket = require("./s3.js");
 
 //consts
@@ -48,7 +49,8 @@ app.use(bodyParser.json());
 app.use("/", routeSecurity);
 app.use("/api/test", routeTest);
 app.use("/api/trip", routeTrip);
-app.use("/api/step", routeStep)
+app.use("/api/step", routeStep);
+app.use("/api/poi", routePoi)
 
 /*
 Code below is used to check for token and securise all routes
