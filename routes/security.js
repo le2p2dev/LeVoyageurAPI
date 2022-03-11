@@ -34,21 +34,21 @@ router.post("/whoami", async (req, res) => {
  *
  */
 router.post("/login", async (req, res) => {
-  const userByEmail = await db.User.findOne({
+  const userByUsername = await db.User.findOne({
     where: {
-      email: req.body.email,
+      username: req.body.username,
     },
   }).catch((err) => {
     console.log("error");
   });
 
-  if (!userByEmail) {
+  if (!userByUsername) {
     return res.json({
       message: "Login or password wrong",
     });
   }
 
-  if (userByEmail.password !== req.body.password) {
+  if (userByUsername.password !== req.body.password) {
     return res.json({
       message: "Login or password wrong",
     });
@@ -56,8 +56,8 @@ router.post("/login", async (req, res) => {
 
   const JwTtoken = jwt.sign(
     {
-      id: userByEmail.id,
-      login: userByEmail.email,
+      id: userByUsername.id,
+      login: userByUsername.email,
     },
     process.env.secret || "tichio%11qw12"
   );
@@ -87,16 +87,6 @@ router.post("/login", async (req, res) => {
  *        required: true
  *        description: user's password
  *        in: formData
- *      - name: lastname
- *        type: string
- *        required: true
- *        description : family name
- *        in: formData
- *      - name: firstname
- *        type: string
- *        description : first name
- *        required: true
- *        in: formData
  *    responses:
  *      '200':
  *        description: OK
@@ -104,15 +94,11 @@ router.post("/login", async (req, res) => {
 router.post("/register", (req, res) => {
   console.log(req.body);
   if (
-    req.body.lastname &&
-    req.body.firstname &&
-    req.body.email &&
+    req.body.username &&
     req.body.password
   ) {
     db.User.create({
-      lastname: req.body.lastname,
-      firstname: req.body.firstname,
-      email: req.body.email,
+      username: req.body.username,
       password: req.body.password,
     }).then((dataSubmited) => {
       res.send(dataSubmited);
