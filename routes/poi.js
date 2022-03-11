@@ -28,27 +28,27 @@ const router = express.Router();
  *      - name : longitude
  *        description : longitude of the poi
  *        in : formData
- *        type : double
+ *        type : number
  *        required: true
  *      - name : latitude
  *        description : latitude of the poi
  *        in : formData
- *        type : double
+ *        type : number
  *        required : true
  *      - name : poiType
  *        description : type of the poi
  *        in : formData
- *        type : integer
+ *        type : number
  *        required : false
  *      - name : tripId
  *        description : id of the trip which the poi is attached
  *        in : formData
- *        type : integer
+ *        type : number
  *        required : false
  *      - name : stepId
  *        description : id of the step which the poi is attached
  *        in : formData
- *        type : integer
+ *        type : number
  *        required : false
  *    responses:
  *      '200':
@@ -156,7 +156,7 @@ router.get("/:id", (req, res) => {
  *        '200':
  *          description: OK
  */
- router.get("/trip/:tripId", (req, res) => {
+router.get("/trip/:tripId", (req, res) => {
   const queryParm = req.params;
 
   if (queryParm.tripId) {
