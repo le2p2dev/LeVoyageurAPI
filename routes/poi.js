@@ -39,7 +39,7 @@ const router = express.Router();
  *        description : type of the poi
  *        in : formData
  *        type : integer
- *        required : true
+ *        required : false
  *      - name : tripId
  *        description : id of the trip which the poi is attached
  *        in : formData
