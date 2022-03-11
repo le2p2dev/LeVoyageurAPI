@@ -33,7 +33,7 @@ const dotenv = require("dotenv").config();
 /**
  * routes crée
  */
-//const routeTest = require("../routes/test.js");
+const routeTest = require("../routes/test.js");
 const routeSecurity = require("../routes/security.js");
 const routeTrip = require("../routes/trip.js");
 const routeStep = require("../routes/step")
