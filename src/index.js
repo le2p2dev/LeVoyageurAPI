@@ -20,7 +20,7 @@ const swaggerOptions = {
       servers: ["http://localhost:3630/"],
     },
   },
-  apis: [`src/index.js`, `./routes/*.js`],
+  apis: [`src/index.js`, `routes/*.js`],
 };
 const swaggerDocs = swaggerJsDoc(swaggerOptions);
 app.use("/doc", swaggerUI.serve, swaggerUI.setup(swaggerDocs));
@@ -38,6 +38,7 @@ const routeSecurity = require("../routes/security.js");
 const routeTrip = require("../routes/trip.js");
 const routeStep = require("../routes/step.js");
 const routePoi = require("../routes/poi.js");
+const routePoitype = require("../routes/poitype.js");
 const s3Bucket = require("./s3.js");
 
 //consts
@@ -51,6 +52,7 @@ app.use("/api/test", routeTest);
 app.use("/api/trip", routeTrip);
 app.use("/api/step", routeStep);
 app.use("/api/poi", routePoi)
+app.use("/api/poitype", routePoitype)
 
 /*
 Code below is used to check for token and securise all routes
@@ -79,7 +81,7 @@ app.get("/test", (req, res) => {
   res.send("oto");
 });
 
-db.sequelize.sync().then(() => {
+db.sequelize.sync({force: true}).then(() => {
   app.listen(PORT, () => {
     console.log(`Running on port : http://localhost:${PORT}`);
   });
