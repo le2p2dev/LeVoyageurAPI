@@ -1,8 +1,9 @@
 const express = require("express");
 const bodyParser = require("body-parser");
 const db = require("../models");
-// const { route } = require("./test");
-// const { query } = require("express");
+const { route } = require("./test");
+const { query } = require("express");
+const { is } = require("express/lib/request");
 
 //définition du router
 const router = express.Router();
@@ -19,7 +20,7 @@ const router = express.Router();
  *        description : title of the trip
  *        in: formData
  *        type: string
- *        required: true
+ *        required: false
  *      - name : description
  *        description : description of the trip
  *        in: formData
@@ -53,24 +54,26 @@ const router = express.Router();
  *    responses:
  *      '200':
  *        description: OK
+ *      '204':
+ *        description: no data found
  */
 router.post("/", (req, res) => {
   if (
     req.body.latitude,
-    req.body.longitude,
-    req.body.title
+    req.body.longitude
   ){
-    console.log(typeof(req.body.longitude))
     db.Poi.create({
       title: req.body.title,
       description: req.body.description,
       latitude: req.body.latitude,
       longitude: req.body.longitude,
+      StepId: req.body.stepId,
+      TripId: req.body.tripId
     }).then((dataSubmited) => {
       res.send({
         statut: 200,
         response: dataSubmited,
-      });
+      })
     });
   } else {
     res.status(406).send({
@@ -268,7 +271,6 @@ router.get("/step/:stepId", (req, res) => {
  *          description: poi not found 
  */
 router.put("/", (req, res) => {
-
   db.Poi.findOne({
     where: {
       id: req.body.id
@@ -298,4 +300,48 @@ router.put("/", (req, res) => {
     }
   })
 })
+
+/**
+ * @swagger
+ * /api/poi/ :
+ *  delete:
+ *    summary: delete poi by id
+ *    tags:
+ *      - Point Of Interest
+ *    parameters:
+ *      - name : id
+ *        in: formData
+ *        required: true
+ *        type: integer
+ *        description: id of the poi
+ *    responses:
+ *      '200':
+ *        description: OK
+ *      '204':
+ *        description: no poi found with ID
+ */
+router.delete("/", (req, res) => {
+  if (req.body.id) {
+    db.Poi.findOne({
+      where: {
+        id: req.body.id
+      }
+    }).then(data => {
+      if(data){
+        db.Poi.destroy({
+          where: {
+            id: req.body.id,
+          },
+        }).then(() => {
+          res.send({
+            status: 200,
+            response: "success",
+          });
+        });
+      }else {
+        res.status(204).send()
+      }
+    })
+  }
+});
 module.exports = router;
