@@ -38,7 +38,7 @@ const routeSecurity = require("../routes/security.js");
 const routeTrip = require("../routes/trip.js");
 const routeStep = require("../routes/step.js");
 const routePoi = require("../routes/poi.js");
-const routePoitype = require("../routes/poitype.js");
+//const routePoitype = require("../routes/poitype.js");
 const s3Bucket = require("./s3.js");
 
 //consts
@@ -52,7 +52,7 @@ app.use("/api/test", routeTest);
 app.use("/api/trip", routeTrip);
 app.use("/api/step", routeStep);
 app.use("/api/poi", routePoi)
-app.use("/api/poitype", routePoitype)
+//app.use("/api/poitype", routePoitype)
 
 /*
 Code below is used to check for token and securise all routes
