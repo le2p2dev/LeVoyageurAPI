@@ -1,15 +1,15 @@
 const express = require("express");
 const bodyParser = require("body-parser");
 const db = require("../models");
-const { route } = require("./test");
-const { query } = require("express");
+// const { route } = require("./test");
+// const { query } = require("express");
 
 //définition du router
 const router = express.Router();
 
 /**
  * @swagger
- * /api/poi:
+ * /api/poi/:
  *  post:
  *    summary: create a new point of interest
  *    tags:
@@ -60,6 +60,7 @@ router.post("/", (req, res) => {
     req.body.longitude,
     req.body.title
   ){
+    console.log(typeof(req.body.longitude))
     db.Poi.create({
       title: req.body.title,
       description: req.body.description,
@@ -81,7 +82,7 @@ router.post("/", (req, res) => {
 
 /**
  * @swagger
- * /api/poi:
+ * /api/poi/:
  *  get:
  *    summary: get all pois
  *    tags:
@@ -101,15 +102,15 @@ router.get("/", (req, res) => {
 
 /**
  * @swagger
- * /api/poi/:{id} :
+ * /api/poi/{id} :
  *    get:
  *      summary: get poi by id
  *      tags:
  *        - Point Of Interest
  *      parameters:
  *        - name : id
- *          type: integer
- *          in: params
+ *          type: number
+ *          in: path
  *          description: id of the poi
  *          required : true
  *      responses:
@@ -141,7 +142,7 @@ router.get("/:id", (req, res) => {
 
 /**
  * @swagger
- * /api/poi/trip/:{tripId} :
+ * /api/poi/trip/{tripId} :
  *    get:
  *      summary: get all poi by tripId
  *      tags:
@@ -149,7 +150,7 @@ router.get("/:id", (req, res) => {
  *      parameters:
  *        - name : tripId
  *          type: integer
- *          in: params
+ *          in: path
  *          description: id of the trip who want all pooi
  *          required : true
  *      responses:
@@ -160,7 +161,7 @@ router.get("/trip/:tripId", (req, res) => {
   const queryParm = req.params;
 
   if (queryParm.tripId) {
-    db.Trip.findAll({
+    db.Poi.findAll({
       where: {
         TripId: queryParm.tripId,
       },
@@ -178,37 +179,123 @@ router.get("/trip/:tripId", (req, res) => {
   }
 });
 
-
 /**
  * @swagger
- * /api/poi/{id} :
- *  delete:
- *    summary: delete poi by id
- *    tags:
- *      - Point Of Interest
- *    parameters:
- *      - name : id
- *        in: formData
- *        required: true
- *        type: integer
- *        description: id of the poi
- *    responses:
- *      '200':
- *        description: OK
+ * /api/poi/step/{stepId} :
+ *    get:
+ *      summary: get all poi by stepId
+ *      tags:
+ *        - Point Of Interest
+ *      parameters:
+ *        - name : stepId
+ *          type: integer
+ *          in: path
+ *          description: id of the step who want all pooi
+ *          required : true
+ *      responses:
+ *        '200':
+ *          description: OK
  */
-router.delete("/:id", (req, res) => {
-  if (req.body.id) {
-    db.Poi.destroy({
+router.get("/step/:stepId", (req, res) => {
+  const queryParm = req.params;
+
+  if (queryParm.stepId) {
+    db.Poi.findAll({
       where: {
-        id: req.body.id,
+        StepId: queryParm.stepId,
       },
-    }).then(() => {
+    }).then((data) => {
       res.send({
         status: 200,
-        response: "success",
+        response: data,
       });
+    });
+  } else {
+    res.status(406).send({
+      status: 406,
+      response: "problem occured",
     });
   }
 });
 
+/**
+ * @swagger
+ * /api/poi/:
+ *    put:
+ *      summary: update poi value 
+ *      tags:
+ *        - Point Of Interest
+ *      parameters:
+ *        - name : id
+ *          type: integer
+ *          in: formData
+ *          description: id of the step who want all pooi
+ *          required : true
+ *        - name : title
+ *          type: string
+ *          in: formData
+ *          description: new title of the poi
+ *          required : false
+ *        - name : description
+ *          type: string
+ *          in: formData
+ *          description: new description of the poi
+ *          required : false
+ *        - name : latitude
+ *          type: number
+ *          in: formData
+ *          description: new latitude of the poi
+ *          required : false
+ *        - name : longitude
+ *          type: number
+ *          in: formData
+ *          description: new longitude of the poi
+ *          required : false
+ *        - name : stepId
+ *          type: number
+ *          in: formData
+ *          description: new stepId of the poi
+ *          required : false
+ *        - name : tripId
+ *          type: number
+ *          in: formData
+ *          description: new tripId of the poi
+ *          required : false
+ *      responses:
+ *        '200':
+ *          description: OK
+ *        '204' : 
+ *          description: poi not found 
+ */
+router.put("/", (req, res) => {
+
+  db.Poi.findOne({
+    where: {
+      id: req.body.id
+    }
+  }).then(data => {
+    if(data){
+      const values = {
+        title : req.body.title,
+        description : req.body.description,
+        latitude: req.body.latitude,
+        longitude: req.body.longitude,
+        StepId: req.body.stepId,
+        TripId: req.body.tripID
+      }
+      console.log("value : " + req.body.longitude, "Type of " +typeof(req.body.longitude))
+
+      data.update(values).then(updateData => {
+        console.log(`updated record ${JSON.stringify(updateData,null,2)}`)
+      }).then((updateData) => {
+        res.send({
+          status: 200,
+          response: updateData
+        })
+      })
+    } else {
+      res.status(204).send()
+    }
+  })
+})
 module.exports = router;
