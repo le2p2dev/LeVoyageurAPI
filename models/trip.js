@@ -7,7 +7,8 @@ module.exports = (sequelize, Datatypes) => {
     });
   
     Trip.associate = function (models) {
-      models.Trip.hasMany(models.Step)
+      models.Trip.hasMany(models.Step),
+      models.Trip.hasMany(models.Poi)
     };
     return Trip;
   };
