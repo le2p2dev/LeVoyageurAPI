@@ -38,7 +38,7 @@ const router = express.Router();
  *      '200':
  *        description: OK
  */
- router.post("/", (req, res) => {
+router.post("/", (req, res) => {
   if (
     req.body.title
   ){
@@ -72,8 +72,8 @@ const router = express.Router();
  *      '200':
  *        description: OK
  */
- router.get("/", (req, res) => {
-  db.Trip.findAll().then((data) => {
+router.get("/", (req, res) => {
+  db.Step.findAll().then((data) => {
     res.send({
       status: 200,
       response: data,
@@ -83,7 +83,7 @@ const router = express.Router();
 
 /**
  * @swagger
- * /api/step/:{id} :
+ * /api/step/{id} :
  *    get:
  *      summary: get step by id
  *      tags:
@@ -91,7 +91,7 @@ const router = express.Router();
  *      parameters:
  *        - name : id
  *          type: integer
- *          in: params
+ *          in: path
  *          description: id of the step
  *          required : true
  *      responses:
@@ -99,13 +99,12 @@ const router = express.Router();
  *          description: OK
  *
  */
- router.get("/:id", (req, res) => {
-  const queryParm = req.params;
+router.get("/:id", (req, res) => {
 
-  if (queryParm.id) {
+  if (req.params.id) {
     db.Step.findAll({
       where: {
-        id: queryParm.id,
+        id: req.params.id,
       },
     }).then((data) => {
       res.send({
@@ -123,7 +122,7 @@ const router = express.Router();
 
 /**
  * @swagger
- * /api/step/{id} :
+ * /api/step/ :
  *  delete:
  *    summary: delete step by id
  *    tags:
@@ -138,7 +137,7 @@ const router = express.Router();
  *      '200':
  *        description: OK
  */
-router.delete("/:id", (req, res) => {
+router.delete("/", (req, res) => {
   if (req.body.id) {
     db.Step.destroy({
       where: {
@@ -155,15 +154,15 @@ router.delete("/:id", (req, res) => {
 
 /**
  * @swagger
- * /api/step/trip/:{tripId} :
+ * /api/step/trip/{id} :
  *    get:
  *      summary: get all step by tripId
  *      tags:
  *        - Step
  *      parameters:
- *        - name : tripId
+ *        - name : id
  *          type: integer
- *          in: params
+ *          in: path
  *          description: id of the trip who want all step
  *          required : true
  *      responses:
@@ -171,13 +170,12 @@ router.delete("/:id", (req, res) => {
  *          description: OK
  *
  */
- router.get("/trip/:tripId", (req, res) => {
-  const queryParm = req.params;
+ router.get("/trip/:id", (req, res) => {
 
-  if (queryParm.tripId) {
-    db.Trip.findAll({
+  if (req.params.id) {
+    db.Step.findAll({
       where: {
-        TripId: queryParm.tripId,
+        TripId: req.params.id,
       },
     }).then((data) => {
       res.send({
