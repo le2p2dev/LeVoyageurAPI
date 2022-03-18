@@ -81,7 +81,7 @@ app.get("/test", (req, res) => {
   res.send("oto");
 });
 
-db.sequelize.sync({force: true}).then(() => {
+db.sequelize.sync({alter: true}).then(() => {
   app.listen(PORT, () => {
     console.log(`Running on port : http://localhost:${PORT}`);
   });
