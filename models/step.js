@@ -3,6 +3,8 @@ module.exports = (sequelize, Datatypes) => {
         title: Datatypes.STRING,
         description: Datatypes.STRING,
         duration: Datatypes.INTEGER,
+        longitude: Datatypes.DOUBLE,
+        latitude: Datatypes.DOUBLE
     });
     
     Step.associate = function (models) {
