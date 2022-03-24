@@ -7,38 +7,6 @@ const { query } = require("express");
 //définition du router
 const router = express.Router();
 
-/**
- * @swagger
- * /api/trip:
- *  post:
- *    summary: create a new trip
- *    tags:
- *      - Trip
- *    parameters:
- *      - name : title
- *        description : title of the trip
- *        in: formData
- *        type: string
- *        required: true
- *      - name : description
- *        description : description of the trip
- *        in: formData
- *        type: string
- *        required: false
- *      - name : backgroundUrl
- *        description : url of the background image of the trip
- *        in : formData
- *        type : string
- *        required: false
- *      - name : startDate
- *        description : start date of the trip
- *        in : formData
- *        type : date
- *        required : false
- *    responses:
- *      '200':
- *        description: OK
- */
 router.post("/", (req, res) => {
   if (
     req.body.title
@@ -62,17 +30,6 @@ router.post("/", (req, res) => {
   }
 });
 
-/**
- * @swagger
- * /api/trip:
- *  get:
- *    summary: get all trips
- *    tags:
- *      - Trip
- *    responses:
- *      '200':
- *        description: OK
- */
 router.get("/", (req, res) => {
   db.Trip.findAll().then((data) => {
     res.send({
@@ -82,31 +39,12 @@ router.get("/", (req, res) => {
   });
 });
 
-/**
- * @swagger
- * /api/trip/:{id} :
- *    get:
- *      summary: get trip by id
- *      tags:
- *        - Trip
- *      parameters:
- *        - name : id
- *          type: integer
- *          in: params
- *          description: id of the trip
- *          required : true
- *      responses:
- *        '200':
- *          description: OK
- *
- */
 router.get("/:id", (req, res) => {
-  const queryParm = req.params;
 
-  if (queryParm.id) {
+  if (req.params.id) {
     db.Trip.findAll({
       where: {
-        id: queryParm.id,
+        id: req.params.id,
       },
     }).then((data) => {
       res.send({
@@ -122,28 +60,11 @@ router.get("/:id", (req, res) => {
   }
 });
 
-/**
- * @swagger
- * /api/trip/{id} :
- *  delete:
- *    summary: delete trip by id
- *    tags:
- *      - Trip
- *    parameters:
- *      - name : id
- *        in: formData
- *        required: true
- *        type: integer
- *        description: description de l'id
- *    responses:
- *      '200':
- *        description: OK
- */
 router.delete("/:id", (req, res) => {
-  if (req.body.id) {
+  if (req.params.id) {
     db.Trip.destroy({
       where: {
-        id: req.body.id,
+        id: req.params.id,
       },
     }).then(() => {
       res.send({
@@ -153,5 +74,33 @@ router.delete("/:id", (req, res) => {
     });
   }
 });
+
+router.put('/:id', (req, res) => {
+  db.Trip.findOne({
+    where: {
+      id: req.params.id
+    }
+  }).then(data => {
+    if(data){
+      const values = {
+        title : req.body.title,
+        description: req.body.description,
+        backgroundUrl: req.body.backgroundUrl,
+        startDate: req.body.startDate
+      }
+
+      data.update(values).then(updateData => {
+        console.log(`updated record ${JSON.stringify(updateData,null,2)}`)
+      }).then((updateData) => {
+        res.send({
+          status: 200,
+          response: updateData
+        })
+      })
+    } else {
+      res.status(404).send()
+    }
+  })
+})
 
 module.exports = router;

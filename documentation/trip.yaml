@@ -1,0 +1,97 @@
+/api/trip:
+  post:
+    summary: create a new trip
+    tags:
+      - Trip
+    parameters:
+      - name : title
+        description : title of the trip
+        in: formData
+        type: string
+        required: true
+      - name : description
+        description : description of the trip
+        in: formData
+        type: string
+        required: false
+      - name : backgroundUrl
+        description : url of the background image of the trip
+        in : formData
+        type : string
+        required: false
+      - name : startDate
+        description : start date of the trip
+        in : formData
+        type : date
+        required : false
+    responses:
+      '200':
+        description: OK
+  get: 
+    summary: get all trip
+    tags:
+      - Trip
+    responses:
+      '200':
+        description: OK
+
+/api/trip/{id}:
+  get:
+    summary: get trip by id
+    tags:
+      - Trip
+    parameters:
+      - name : id
+        type: integer
+        in: path
+        description: id of the trip
+        required : true
+    responses:
+      '200':
+        description: OK
+  delete:
+    summary: delete trip by id
+    tags:
+      - Trip
+    parameters:
+      - name : id
+        in: path
+        required: true
+        type: integer
+        description: description of the id
+    responses:
+      '200':
+        description: OK
+  put:
+    summary: modify a trip
+    tags:
+      - Trip
+    parameters:
+      - name : id
+        in: path
+        required: true
+        type: integer
+        description: id of the trip who want modify
+      - name : title
+        in: formData
+        required: false
+        type: string
+        description: new title of the trip
+      - name : description
+        in: formData
+        required: false
+        type: string
+        description: new description of the trip
+      - name : backgroundUrl
+        in: formData
+        required: false
+        type: string
+        description: new background image of the trip
+      - name : startDate
+        in: date
+        required: false
+        type: string
+        description: new start date of the trip
+    responses:
+      '200':
+        description: Ok
