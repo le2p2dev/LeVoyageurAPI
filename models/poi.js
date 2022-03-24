@@ -6,5 +6,9 @@ module.exports = (sequelize, Datatypes) => {
         latitude: Datatypes.DOUBLE,
     });
     
+    Poi.associate = function (models) {
+        models.Poi.belongsTo(models.Poitype)
+    };
+
     return Poi
 }

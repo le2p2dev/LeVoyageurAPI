@@ -51,6 +51,11 @@ const router = express.Router();
  *        in : formData
  *        type : number
  *        required : false
+ *      - name : poiType
+ *        description : type of the poi
+ *        in : formData
+ *        type : number
+ *        required : false
  *    responses:
  *      '200':
  *        description: OK
@@ -68,7 +73,8 @@ router.post("/", (req, res) => {
       latitude: req.body.latitude,
       longitude: req.body.longitude,
       StepId: req.body.stepId,
-      TripId: req.body.tripId
+      TripId: req.body.tripId,
+      PoitypeId: req.body.poiType
     }).then((dataSubmited) => {
       res.send({
         statut: 200,
@@ -264,6 +270,11 @@ router.get("/step/:stepId", (req, res) => {
  *          in: formData
  *          description: new tripId of the poi
  *          required : false
+ *        - name : poiType
+ *          type: number
+ *          in: formData
+ *          description: new type of the poi
+ *          required : false
  *      responses:
  *        '200':
  *          description: OK
@@ -283,7 +294,8 @@ router.put("/", (req, res) => {
         latitude: req.body.latitude,
         longitude: req.body.longitude,
         StepId: req.body.stepId,
-        TripId: req.body.tripID
+        TripId: req.body.tripID,
+        PoitypeId: req.body.poiType
       }
       console.log("value : " + req.body.longitude, "Type of " +typeof(req.body.longitude))
 
