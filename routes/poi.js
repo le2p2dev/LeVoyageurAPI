@@ -8,60 +8,6 @@ const { is } = require("express/lib/request");
 //définition du router
 const router = express.Router();
 
-/**
- * @swagger
- * /api/poi/:
- *  post:
- *    summary: create a new point of interest
- *    tags:
- *      - Point Of Interest
- *    parameters:
- *      - name : title
- *        description : title of the trip
- *        in: formData
- *        type: string
- *        required: false
- *      - name : description
- *        description : description of the trip
- *        in: formData
- *        type: string
- *        required: false
- *      - name : longitude
- *        description : longitude of the poi
- *        in : formData
- *        type : number
- *        required: true
- *      - name : latitude
- *        description : latitude of the poi
- *        in : formData
- *        type : number
- *        required : true
- *      - name : poiType
- *        description : type of the poi
- *        in : formData
- *        type : number
- *        required : false
- *      - name : tripId
- *        description : id of the trip which the poi is attached
- *        in : formData
- *        type : number
- *        required : false
- *      - name : stepId
- *        description : id of the step which the poi is attached
- *        in : formData
- *        type : number
- *        required : false
- *      - name : poiType
- *        description : type of the poi
- *        in : formData
- *        type : number
- *        required : false
- *    responses:
- *      '200':
- *        description: OK
- *      '204':
- *        description: no data found
- */
 router.post("/", (req, res) => {
   if (
     req.body.latitude,
@@ -89,17 +35,6 @@ router.post("/", (req, res) => {
   }
 });
 
-/**
- * @swagger
- * /api/poi/:
- *  get:
- *    summary: get all pois
- *    tags:
- *      - Point Of Interest
- *    responses:
- *      '200':
- *        description: OK
- */
 router.get("/", (req, res) => {
   db.Poi.findAll().then((data) => {
     res.send({
@@ -109,31 +44,13 @@ router.get("/", (req, res) => {
   });
 });
 
-/**
- * @swagger
- * /api/poi/{id} :
- *    get:
- *      summary: get poi by id
- *      tags:
- *        - Point Of Interest
- *      parameters:
- *        - name : id
- *          type: number
- *          in: path
- *          description: id of the poi
- *          required : true
- *      responses:
- *        '200':
- *          description: OK
- *
- */
 router.get("/:id", (req, res) => {
   const queryParm = req.params;
 
-  if (queryParm.id) {
+  if (req.params.id) {
     db.Poi.findAll({
       where: {
-        id: queryParm.id,
+        id: req.params.id,
       },
     }).then((data) => {
       res.send({
@@ -149,30 +66,12 @@ router.get("/:id", (req, res) => {
   }
 });
 
-/**
- * @swagger
- * /api/poi/trip/{tripId} :
- *    get:
- *      summary: get all poi by tripId
- *      tags:
- *        - Point Of Interest
- *      parameters:
- *        - name : tripId
- *          type: integer
- *          in: path
- *          description: id of the trip who want all pooi
- *          required : true
- *      responses:
- *        '200':
- *          description: OK
- */
 router.get("/trip/:tripId", (req, res) => {
-  const queryParm = req.params;
 
-  if (queryParm.tripId) {
+  if (req.params.tripId) {
     db.Poi.findAll({
       where: {
-        TripId: queryParm.tripId,
+        TripId: req.params.tripId,
       },
     }).then((data) => {
       res.send({
@@ -188,30 +87,12 @@ router.get("/trip/:tripId", (req, res) => {
   }
 });
 
-/**
- * @swagger
- * /api/poi/step/{stepId} :
- *    get:
- *      summary: get all poi by stepId
- *      tags:
- *        - Point Of Interest
- *      parameters:
- *        - name : stepId
- *          type: integer
- *          in: path
- *          description: id of the step who want all pooi
- *          required : true
- *      responses:
- *        '200':
- *          description: OK
- */
 router.get("/step/:stepId", (req, res) => {
-  const queryParm = req.params;
 
-  if (queryParm.stepId) {
+  if (req.params.stepId) {
     db.Poi.findAll({
       where: {
-        StepId: queryParm.stepId,
+        StepId: req.params.stepId,
       },
     }).then((data) => {
       res.send({
@@ -227,64 +108,10 @@ router.get("/step/:stepId", (req, res) => {
   }
 });
 
-/**
- * @swagger
- * /api/poi/:
- *    put:
- *      summary: update poi value 
- *      tags:
- *        - Point Of Interest
- *      parameters:
- *        - name : id
- *          type: integer
- *          in: formData
- *          description: id of the step who want all pooi
- *          required : true
- *        - name : title
- *          type: string
- *          in: formData
- *          description: new title of the poi
- *          required : false
- *        - name : description
- *          type: string
- *          in: formData
- *          description: new description of the poi
- *          required : false
- *        - name : latitude
- *          type: number
- *          in: formData
- *          description: new latitude of the poi
- *          required : false
- *        - name : longitude
- *          type: number
- *          in: formData
- *          description: new longitude of the poi
- *          required : false
- *        - name : stepId
- *          type: number
- *          in: formData
- *          description: new stepId of the poi
- *          required : false
- *        - name : tripId
- *          type: number
- *          in: formData
- *          description: new tripId of the poi
- *          required : false
- *        - name : poiType
- *          type: number
- *          in: formData
- *          description: new type of the poi
- *          required : false
- *      responses:
- *        '200':
- *          description: OK
- *        '204' : 
- *          description: poi not found 
- */
-router.put("/", (req, res) => {
+router.put("/:id", (req, res) => {
   db.Poi.findOne({
     where: {
-      id: req.body.id
+      id: req.params.id
     }
   }).then(data => {
     if(data){
@@ -297,7 +124,6 @@ router.put("/", (req, res) => {
         TripId: req.body.tripID,
         PoitypeId: req.body.poiType
       }
-      console.log("value : " + req.body.longitude, "Type of " +typeof(req.body.longitude))
 
       data.update(values).then(updateData => {
         console.log(`updated record ${JSON.stringify(updateData,null,2)}`)
@@ -313,36 +139,17 @@ router.put("/", (req, res) => {
   })
 })
 
-/**
- * @swagger
- * /api/poi/ :
- *  delete:
- *    summary: delete poi by id
- *    tags:
- *      - Point Of Interest
- *    parameters:
- *      - name : id
- *        in: formData
- *        required: true
- *        type: integer
- *        description: id of the poi
- *    responses:
- *      '200':
- *        description: OK
- *      '204':
- *        description: no poi found with ID
- */
-router.delete("/", (req, res) => {
-  if (req.body.id) {
+router.delete("/:id", (req, res) => {
+  if (req.params.id) {
     db.Poi.findOne({
       where: {
-        id: req.body.id
+        id: req.params.id
       }
     }).then(data => {
       if(data){
         db.Poi.destroy({
           where: {
-            id: req.body.id,
+            id: req.params.id,
           },
         }).then(() => {
           res.send({
@@ -356,4 +163,5 @@ router.delete("/", (req, res) => {
     })
   }
 });
+
 module.exports = router;
