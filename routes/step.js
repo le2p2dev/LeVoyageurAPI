@@ -6,38 +6,6 @@ const { route } = require("./test");
 //définition du router
 const router = express.Router();
 
-/**
- * @swagger
- * /api/step:
- *  post:
- *    summary: create a new step
- *    tags:
- *      - Step
- *    parameters:
- *      - name : title
- *        description : title of the step
- *        in: formData
- *        type: string
- *        required: true
- *      - name: description
- *        description: description of the step
- *        in: formaData
- *        type: string
- *        required: false
- *      - name : duration
- *        description: duration of the step
- *        in : formData
- *        type: integer
- *        required: false
- *      - name : tripId
- *        description: id of the trip which the step is attached
- *        in : formData
- *        type: integer
- *        required: false
- *    responses:
- *      '200':
- *        description: OK
- */
 router.post("/", (req, res) => {
   if (
     req.body.title
@@ -61,17 +29,6 @@ router.post("/", (req, res) => {
   }
 });
 
-/**
- * @swagger
- * /api/step:
- *  get:
- *    summary: get all trips
- *    tags:
- *      - Step
- *    responses:
- *      '200':
- *        description: OK
- */
 router.get("/", (req, res) => {
   db.Step.findAll().then((data) => {
     res.send({
@@ -81,30 +38,12 @@ router.get("/", (req, res) => {
   });
 });
 
-/**
- * @swagger
- * /api/step/{id} :
- *    get:
- *      summary: get step by id
- *      tags:
- *        - Step
- *      parameters:
- *        - name : id
- *          type: integer
- *          in: path
- *          description: id of the step
- *          required : true
- *      responses:
- *        '200':
- *          description: OK
- *
- */
 router.get("/:id", (req, res) => {
 
   if (req.params.id) {
     db.Step.findAll({
       where: {
-        id: req.params.id,
+        id: req.path.id,
       },
     }).then((data) => {
       res.send({
@@ -120,28 +59,11 @@ router.get("/:id", (req, res) => {
   }
 });
 
-/**
- * @swagger
- * /api/step/ :
- *  delete:
- *    summary: delete step by id
- *    tags:
- *      - Step
- *    parameters:
- *      - name : id
- *        in: formData
- *        required: true
- *        type: integer
- *        description: id of the step who want delete
- *    responses:
- *      '200':
- *        description: OK
- */
-router.delete("/", (req, res) => {
-  if (req.body.id) {
+router.delete("/:id", (req, res) => {
+  if (req.params.id) {
     db.Step.destroy({
       where: {
-        id: req.body.id,
+        id: req.params.id,
       },
     }).then(() => {
       res.send({
@@ -152,25 +74,7 @@ router.delete("/", (req, res) => {
   }
 });
 
-/**
- * @swagger
- * /api/step/trip/{id} :
- *    get:
- *      summary: get all step by tripId
- *      tags:
- *        - Step
- *      parameters:
- *        - name : id
- *          type: integer
- *          in: path
- *          description: id of the trip who want all step
- *          required : true
- *      responses:
- *        '200':
- *          description: OK
- *
- */
- router.get("/trip/:id", (req, res) => {
+router.get("/trip/:id", (req, res) => {
 
   if (req.params.id) {
     db.Step.findAll({
@@ -189,6 +93,35 @@ router.delete("/", (req, res) => {
       response: "problem occured",
     });
   }
+});
+
+router.put("/:id", (req, res) => {
+  db.Step.findOne({
+    where: {
+      id: req.params.id
+    }
+  }).then(data => {
+    if(data){
+      const values = {
+        title : req.body.title,
+        description : req.body.description,
+        duration: req.body.duration,
+        latitude: req.body.latitude,
+        longitude: req.body.longitude,
+      }
+
+      data.update(values).then(updateData => {
+        console.log(`updated record ${JSON.stringify(updateData,null,2)}`)
+      }).then((updateData) => {
+        res.send({
+          status: 200,
+          response: updateData
+        })
+      })
+    } else {
+      res.status(204).send()
+    }
+  })
 });
 
 module.exports = router;

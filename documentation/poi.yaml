@@ -1,0 +1,163 @@
+/api/poi/:
+  post:
+    summary: create a new point of interest
+    tags:
+      - Point Of Interest
+    parameters:
+      - name : title
+        description : title of the trip
+        in: formData
+        type: string
+        required: false
+      - name : description
+        description : description of the trip
+        in: formData
+        type: string
+        required: false
+      - name : longitude
+        description : longitude of the poi
+        in : formData
+        type : number
+        required: true
+      - name : latitude
+        description : latitude of the poi
+        in : formData
+        type : number
+        required : true
+      - name : tripId
+        description : id of the trip which the poi is attached
+        in : formData
+        type : number
+        required : false
+      - name : stepId
+        description : id of the step which the poi is attached
+        in : formData
+        type : number
+        required : false
+      - name : poiType
+        description : type of the poi
+        in : formData
+        type : number
+        required : false
+    responses:
+      '200':
+        description: OK
+      '204':
+        description: no data found
+  get:
+    summary: get all pois
+    tags:
+      - Point Of Interest
+    responses:
+      '200':
+        description: OK
+
+/api/poi/{id}:
+  get:
+    summary: get poi by id
+    tags:
+      - Point Of Interest
+    parameters:
+      - name : id
+        type: number
+        in: path
+        description: id of the poi
+        required : true
+    responses:
+      '200':
+        description: OK
+  delete:
+    summary: delete poi by id
+    tags:
+      - Point Of Interest
+    parameters:
+      - name : id
+        in: path
+        type: integer
+        description: id of the poi
+    responses:
+      '200':
+        description: OK
+      '204':
+        description: no poi found with ID
+  put:
+    summary: update poi value 
+    tags:
+      - Point Of Interest
+    parameters:
+      - name : id
+        type: integer
+        in: path
+        description: id of the step who want all pooi
+        required : true
+      - name : title
+        type: string
+        in: formData
+        description: new title of the poi
+        required : false
+      - name : description
+        type: string
+        in: formData
+        description: new description of the poi
+        required : false
+      - name : latitude
+        type: number
+        in: formData
+        description: new latitude of the poi
+        required : false
+      - name : longitude
+        type: number
+        in: formData
+        description: new longitude of the poi
+        required : false
+      - name : stepId
+        type: number
+        in: formData
+        description: new stepId of the poi
+        required : false
+      - name : tripId
+        type: number
+        in: formData
+        description: new tripId of the poi
+        required : false
+      - name : poiType
+        type: number
+        in: formData
+        description: new type of the poi
+        required : false
+    responses:
+      '200':
+        description: OK
+      '204' : 
+        description: poi not found
+
+
+/api/poi/trip/{tripId} :
+  get:
+    summary: get all poi by tripId
+    tags:
+      - Point Of Interest
+    parameters:
+      - name : tripId
+        type: integer
+        in: path
+        description: id of the trip who want all pooi
+        required : true
+    responses:
+      '200':
+        description: OK
+
+/api/poi/step/{stepId} :
+  get:
+    summary: get all poi by stepId
+    tags:
+      - Point Of Interest
+    parameters:
+      - name : stepId
+        type: integer
+        in: path
+        description: id of the step who want all pooi
+        required : true
+    responses:
+      '200':
+        description: OK

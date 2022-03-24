@@ -1,0 +1,117 @@
+/api/step:
+  post:
+    summary: create a new step
+    tags:
+      - Step
+    parameters:
+      - name: longitude
+        description: longitude of the step
+        in: formaData
+        type: number
+        required: true
+      - name: latitude
+        description: latitude of the step
+        in: formaData
+        type: number
+        required: true
+      - name : title
+        description : title of the step
+        in: formData
+        type: string
+        required: false
+      - name: description
+        description: description of the step
+        in: formaData
+        type: string
+        required: false
+      - name : duration
+        description: duration of the step
+        in : formData
+        type: integer
+        required: false
+      - name : tripId
+        description: id of the trip which the step is attached
+        in : formData
+        type: integer
+        required: true
+    responses:
+      '200':
+        description: OK
+  get:
+    summary: get all trips
+    tags:
+      - Step
+    responses:
+      '200':
+        description: OK
+      '404':
+        description: not data found
+
+/api/step/{id}:
+  put:
+    summary: created a step
+    tags:
+      - Step
+    parameters:
+      - name : id
+        description : id of the step who want to modify
+        in: path
+        type: integer
+        required: true
+      - name : title
+        description : new title of the step
+        in: formData
+        type: string
+        required: false
+      - name: description
+        description: new description of the step
+        in: formaData
+        type: string
+        required: false
+      - name : duration
+        description: new duration of the step
+        in : formData
+        type: integer
+        required: false
+      - name : tripId
+        description: new id of the trip which the step is attached
+        in : formData
+        type: integer
+        required: false
+    responses:
+      '200':
+        description: OK
+  get: 
+    summary: get step by id
+    tags:
+      - Step
+    parameters:
+      - name : id
+        description : id of the step who want to get
+        in: path
+        type: integer
+        required: false
+  delete:
+    summary: delete a step
+    tags:
+      - Step
+    parameters:
+      description: id of the step who want delete
+      in: path  
+      type: integer
+      required: true
+
+/api/step/trip/{id}:
+  get:
+    summary: get all step by tripId
+    tags:
+      - Step
+    parameters:
+      - name : id
+        type: integer
+        in: path
+        description: id of the trip who want all step
+        required : true
+    responses:
+      '200':
+        description: OK
