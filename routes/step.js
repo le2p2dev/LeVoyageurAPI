@@ -7,14 +7,14 @@ const { route } = require("./test");
 const router = express.Router();
 
 router.post("/", (req, res) => {
-  if (
-    req.body.title
-  ){
+  if ((req.body.longitude, req.body.latitude)) {
     db.Step.create({
+      longitude: req.body.longitude,
+      latitude: req.body.latitude,
       title: req.body.title,
       description: req.body.description,
       duration: req.body.duration,
-      TripId: req.body.tripId
+      TripId: req.body.tripId,
     }).then((dataSubmited) => {
       res.send({
         statut: 200,
