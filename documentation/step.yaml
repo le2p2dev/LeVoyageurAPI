@@ -6,12 +6,12 @@
     parameters:
       - name: longitude
         description: longitude of the step
-        in: formaData
+        in: formData
         type: number
         required: true
       - name: latitude
         description: latitude of the step
-        in: formaData
+        in: formData
         type: number
         required: true
       - name : title
@@ -21,7 +21,7 @@
         required: false
       - name: description
         description: description of the step
-        in: formaData
+        in: formData
         type: string
         required: false
       - name : duration
