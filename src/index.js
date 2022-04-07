@@ -52,6 +52,8 @@ app.use("/api/test", routeTest);
 app.use("/api/trip", routeTrip);
 app.use("/api/step", routeStep);
 app.use("/api/poi", routePoi)
+app.use("/api/auth", require("../routes/user"));
+
 //app.use("/api/poitype", routePoitype)
 
 /*
@@ -81,7 +83,7 @@ app.get("/test", (req, res) => {
   res.send("oto");
 });
 
-db.sequelize.sync({alter: true}).then(() => {
+db.sequelize.sync({ force: true }).then(() => {
   app.listen(PORT, () => {
     console.log(`Running on port : http://localhost:${PORT}`);
   });
