@@ -1,117 +1,111 @@
+securityDefinitions:  
+  JWT:  
+    type: apiKey  
+    in: header  
+    name: JWT token 
+
 /api/step:
-  post:
-    summary: create a new step
+  get:
+    tags:
+      - Step
+    responses:
+      '200': 
+        description: all step in database
+
+/api/step/{idStep}:
+  get:
     tags:
       - Step
     parameters:
-      - name: longitude
-        description: longitude of the step
-        in: formData
-        type: number
-        required: true
-      - name: latitude
-        description: latitude of the step
-        in: formData
-        type: number
-        required: true
-      - name : title
-        description : title of the step
-        in: formData
-        type: string
-        required: false
-      - name: description
-        description: description of the step
-        in: formData
-        type: string
-        required: false
-      - name : duration
-        description: duration of the step
-        in : formData
+      - in: path
+        name: idStep
         type: integer
-        required: false
-      - name : tripId
-        description: id of the trip which the step is attached
-        in : formData
-        type: integer
-        required: true
     responses:
-      '200':
-        description: OK
-  get:
-    summary: get all trips
-    tags:
-      - Step
-    responses:
-      '200':
-        description: OK
+      '200': 
+        description: all step in database where id eqal to the idStep
       '404':
-        description: not data found
+        description: not step found with this id
 
-/api/step/{id}:
-  put:
-    summary: created a step
+/api/user/{id}/trip/{tripId}/step:
+  get: 
     tags:
       - Step
+    security:
+      - JWT: []
     parameters:
-      - name : id
-        description : id of the step who want to modify
+      - in: path
+        name: id
+        type: integer
+      - in: path
+        name: tripId
+        type: integer
+    responses:
+      '200': 
+        description: all step belonging to the trip
+      '404':
+        description: no user or step find
+      '401':
+        description: you are not authorized to perform this action whiout token
+  post:
+    tags:
+      - Step
+    security:
+      - JWT: []
+    parameters:
+      - name: id
         in: path
         type: integer
-        required: true
-      - name : title
-        description : new title of the step
+      - name: tripId
+        in: path
+        type: integer
+      - name: stepId
+        in: path
+        type: integer
+      - name: title
         in: formData
         type: string
-        required: false
+        required: true
       - name: description
-        description: new description of the step
-        in: formaData
+        in: formData
         type: string
-        required: false
-      - name : duration
-        description: new duration of the step
-        in : formData
+      - name: duration
+        in: formData
         type: integer
-        required: false
-      - name : tripId
-        description: new id of the trip which the step is attached
-        in : formData
-        type: integer
-        required: false
-    responses:
-      '200':
-        description: OK
-  get: 
-    summary: get step by id
-    tags:
-      - Step
-    parameters:
-      - name : id
-        description : id of the step who want to get
-        in: path
-        type: integer
-        required: false
-  delete:
-    summary: delete a step
-    tags:
-      - Step
-    parameters:
-      description: id of the step who want delete
-      in: path  
-      type: integer
-      required: true
+      - name: longitude
+        in: formData
+        type: double
+      - name: latitude
+        in: formData
+        type: double
 
-/api/step/trip/{id}:
-  get:
-    summary: get all step by tripId
+/api/user/{id}/trip/{tripId}/step/{stepId}:
+  put:
     tags:
       - Step
+    security:
+      - JWT: []
     parameters:
-      - name : id
-        type: integer
+      - name: id
         in: path
-        description: id of the trip who want all step
-        required : true
-    responses:
-      '200':
-        description: OK
+        type: integer
+      - name: tripId
+        in: path
+        type: integer
+      - name: stepId
+        in: path
+        type: integer
+      - name: title
+        in: formData
+        type: string
+      - name: description
+        in: formData
+        type: string
+      - name: duration
+        in: formData
+        type: integer
+      - name: longitude
+        in: formData
+        type: double
+      - name: latitude
+        in: formData
+        type: double
