@@ -1,22 +1,20 @@
 const db = require("../models/");
 
 module.exports = {
-  getAll(req, res, next) {
-    db.Day.findAll().then((data) => {
-      res.send({
-        status: 200,
-        response: data,
-      });
-    });
+  async getAll(req, res, next) {
+    return res.status(200).send(await db.Day.findAll());
   },
 
-  getById(req, res, next) {
-    db.Day.findByPk(req.params.id).then((data) => {
-      if (data) {
-        return res.status(200).send(data);
-      }
-      return res.status(404).send("data not found");
-    });
+  async getById(req, res, next) {
+    return res.status(200).send(await req.day);
+  },
+
+  async getByStep(req, res, next) {
+    return res.status(200).send(await req.step.getDays());
+  },
+
+  async getByTrip(req, res, next) {
+    return res.status(200).send(await req.trip.getDays());
   },
 
   async create(req, res, next) {
@@ -24,24 +22,30 @@ module.exports = {
       return res.status(406).send("Number missing");
     }
 
-    const data = await db.Day.findAll({
-      where: { number: req.body.number },
-    });
-
-    if (data.length !== 0) {
-      return res
-        .status(406)
-        .send("Number: " + req.body.number + " allready exist");
+    try {
+      await db.Day.create({
+        number: req.body.number,
+        StepId: req.step.id,
+      });
+    } catch (err) {
+      const error = new Error(err);
+      error.code = 500;
+      next(error);
     }
+  },
+
+  async update(req, res, next) {
+    if (req.body.number) req.day.number = number;
+
+    req.day.stepId = req.step.id;
 
     try {
-      db.Day.create({
-        number: req.body.number,
-      }).then((data) => {
-        return res.status(201).send(data);
-      });
-    } catch (error) {
-      return res.status(500).send(error);
+      const newData = await req.day.save();
+      return res.status(201).send(newData);
+    } catch (err) {
+      const error = new Error("Modification failed");
+      error.code = 500;
+      next(error);
     }
   },
 };

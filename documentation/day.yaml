@@ -1,0 +1,90 @@
+securityDefinitions:  
+  JWT:  
+    type: apiKey  
+    in: header  
+    name: JWT token 
+
+/api/day/:
+  get:
+    tags:
+      - Day
+    responses:
+      '200': 
+        description: all day in database
+
+/api/day/{dayId}:
+  get:
+    tags:
+      - Day
+    parameters:
+      - in: path
+        name: dayId
+        type: integer
+    responses:
+      '200': 
+        description: all day in database where id eqal to the dayId
+      '404':
+        description: not day found with this id
+
+/api/user/{id}/trip/{tripId}/step/{stepId}/day:
+  get: 
+    tags:
+      - Day
+    security:
+      - JWT: []
+    parameters:
+      - in: path
+        name: id
+        type: integer
+      - name: tripId
+        in: path
+        type: integer
+    responses:
+      '200': 
+        description: all day belonging to the step
+      '404':
+        description: no user or trip find
+      '401':
+        description: you are not authorized to perform this action whiout token
+
+  post:
+    tags:
+      - Day
+    security:
+      - JWT: []
+    parameters:
+      - name: id
+        in: path
+        type: integer
+      - name: tripId
+        in: path
+        type: integer
+      - name: stepId
+        in: path
+        type: integer
+      - name: number
+        in: formData
+        type: integer
+
+/api/user/{id}/trip/{tripId}/step/{stepId}/day/{dayId}:
+  put:
+    tags:
+      - Day
+    security:
+      - JWT: []
+    parameters:
+      - name: id
+        in: path
+        type: integer
+      - name: tripId
+        in: path
+        type: integer
+      - name: stepId
+        in: path
+        type: integer
+      - name: dayId
+        in: path
+        type: integer
+      - name: number
+        in: formData
+        type: integer
