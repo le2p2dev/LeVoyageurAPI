@@ -1,0 +1,46 @@
+/api/signup:
+  post:
+    summary: create a new user
+    tags:
+      - User
+    parameters:
+      - name : username
+        description : username of the user
+        in: formData
+        type: string
+        required: true
+      - name : password
+        description : password of the user
+        in: formData
+        type: string
+        required: true
+    responses:
+      '201':
+        description: creation OK
+      '406':
+        description: user allready exist
+      '500':
+        description: sever error
+
+/api/login:
+  post:
+    summary: login
+    tags:
+      - User
+    parameters:
+      - name : username
+        description: username of the user
+        in: formData
+        required: true
+      - name: password of the user
+        description: password of the username
+        in: formData
+        type: string
+        required: true
+    responses:
+        '401':
+          description: Wrong data
+        '200':
+          description: OK
+        '500':
+          description: server error

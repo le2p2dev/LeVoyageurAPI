@@ -4,51 +4,52 @@ securityDefinitions:
     in: header  
     name: JWT token 
 
-/api/step:
+/api/day/:
   get:
     tags:
-      - Step
+      - Day
     responses:
       '200': 
-        description: all step in database
+        description: all day in database
 
-/api/step/{idStep}:
+/api/day/{dayId}:
   get:
     tags:
-      - Step
+      - Day
     parameters:
       - in: path
-        name: idStep
+        name: dayId
         type: integer
     responses:
       '200': 
-        description: all step in database where id eqal to the idStep
+        description: all day in database where id eqal to the dayId
       '404':
-        description: not step found with this id
+        description: not day found with this id
 
-/api/user/{id}/trip/{tripId}/step:
+/api/user/{id}/trip/{tripId}/step/{stepId}/day:
   get: 
     tags:
-      - Step
+      - Day
     security:
       - JWT: []
     parameters:
       - in: path
         name: id
         type: integer
-      - in: path
-        name: tripId
+      - name: tripId
+        in: path
         type: integer
     responses:
       '200': 
-        description: all step belonging to the trip
+        description: all day belonging to the step
       '404':
-        description: no user or step find
+        description: no user or trip find
       '401':
         description: you are not authorized to perform this action whiout token
+
   post:
     tags:
-      - Step
+      - Day
     security:
       - JWT: []
     parameters:
@@ -61,27 +62,14 @@ securityDefinitions:
       - name: stepId
         in: path
         type: integer
-      - name: title
-        in: formData
-        type: string
-        required: true
-      - name: description
-        in: formData
-        type: string
-      - name: duration
+      - name: number
         in: formData
         type: integer
-      - name: longitude
-        in: formData
-        type: double
-      - name: latitude
-        in: formData
-        type: double
 
-/api/user/{id}/trip/{tripId}/step/{stepId}:
+/api/user/{id}/trip/{tripId}/step/{stepId}/day/{dayId}:
   put:
     tags:
-      - Step
+      - Day
     security:
       - JWT: []
     parameters:
@@ -94,18 +82,9 @@ securityDefinitions:
       - name: stepId
         in: path
         type: integer
-      - name: title
-        in: formData
-        type: string
-      - name: description
-        in: formData
-        type: string
-      - name: duration
+      - name: dayId
+        in: path
+        type: integer
+      - name: number
         in: formData
         type: integer
-      - name: longitude
-        in: formData
-        type: double
-      - name: latitude
-        in: formData
-        type: double
