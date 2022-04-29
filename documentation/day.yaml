@@ -26,7 +26,7 @@ securityDefinitions:
       '404':
         description: not day found with this id
 
-/api/user/{id}/trip/{tripId}/step/{stepId}/day:
+/api/user/{id}/trip/{tripId}/step/{stepId}/day/{dayId}/poi:
   get: 
     tags:
       - Day

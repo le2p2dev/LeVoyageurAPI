@@ -30,57 +30,48 @@ app.use("/doc", swaggerUI.serve, swaggerUI.setup(swaggerDocs));
  */
 const dotenv = require("dotenv").config();
 
-/**
- * routes crée
- */
-const routeTest = require("../routes/test.js");
-const routeSecurity = require("../routes/security.js");
-const routeTrip = require("../routes/trip.js");
-const routeStep = require("../routes/step.js");
-const routePoi = require("../routes/poi.js");
-//const routePoitype = require("../routes/poitype.js");
-const s3Bucket = require("./s3.js");
-
 //consts
 const PORT = process.env.PORT || 3630;
-app.use(cors())
+app.use(cors());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
-app.use("/", routeSecurity);
-app.use("/api/test", routeTest);
-app.use("/api/trip", routeTrip);
-app.use("/api/step", routeStep);
-app.use("/api/poi", routePoi)
-app.use("/api/auth", require("../routes/user"));
-
-//app.use("/api/poitype", routePoitype)
-
-/*
-Code below is used to check for token and securise all routes
-
-app.use((req, res, next) => {
-  if (!req.headers.authorization) {
-    return res.status(403).json({ error: "No token given" });
-  }
-  next();
+//************ Middleware de préparation de la requete ************//
+app.use("/api/user/:id/", (req, res, next) => {
+  const userMiddleware = require("../middleware/loadUser");
+  userMiddleware.loadUser(req, res, next);
 });
 
- */
+app.use("/api/user/:id/trip/:tripId", (req, res, next) => {
+  const tripMiddleware = require("../middleware/loadTrip");
+  tripMiddleware.loadTrip(req, res, next);
+});
 
-/**
- * @swagger
- * /test:
- *  get:
- *    tags :
- *      - test
- *    decription: test route for exemple purposes
- *    responses:
- *      '200':
- *        description: Success
- */
-app.get("/test", (req, res) => {
-  res.send("oto");
+app.use("/api/user/:id/trip/:tripId/step/:stepId", (req, res, next) => {
+  const stepMiddleware = require("../middleware/loadStep");
+  stepMiddleware.loadStep(req, res, next);
+});
+
+app.use("/api/user/:id/trip/:tripId/ride/:rideId", (req, res, next) => {
+  const rideMiddleware = require("../middleware/loadRide");
+  rideMiddleware.loadRide(req, res, next);
+});
+
+app.use(
+  "/api/user/:id/trip/:tripId/step/:stepId/day/:dayId",
+  (req, res, next) => {
+    const dayMiddleware = require("../middleware/loadDay");
+    dayMiddleware.loadDay(req, res, next);
+  }
+);
+
+//************ Import des routes ************//
+require("../routes")(app);
+
+//************ Middleware de gestion d'erreur ************//
+app.use((err, req, res, next) => {
+  const error = require("../middleware/error");
+  error(err, req, res, next);
 });
 
 db.sequelize.sync({ force: true }).then(() => {
