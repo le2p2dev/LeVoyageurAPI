@@ -1,17 +1,18 @@
-module.exports = (sequelize, Datatypes) => {
-    const Ride = sequelize.define("Ride", {
+const { Sequelize } = require("sequelize");
 
-    });
-    
-    Ride.associate = function (models) {
-        models.Ride.belongsTo(models.RideType)
-        models.Ride.belongsTo(models.Step, {
-            as: "Step_idStart"
-        })
-        models.Ride.belongsTo(models.Step, {
-            as: "Step_idEnd"
-        })
-    };
+module.exports = (sequelize) => {
+  class Ride extends Sequelize.Model {
+    static associate(db) {}
+  }
 
-    return Ride
-}
+  Ride.init(
+    {},
+    {
+      sequelize,
+      modelName: "Ride",
+      timestamps: false,
+    }
+  );
+
+  return Ride;
+};

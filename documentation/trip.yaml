@@ -1,97 +1,91 @@
-/api/trip:
-  post:
-    summary: create a new trip
-    tags:
-      - Trip
-    parameters:
-      - name : title
-        description : title of the trip
-        in: formData
-        type: string
-        required: true
-      - name : description
-        description : description of the trip
-        in: formData
-        type: string
-        required: false
-      - name : backgroundUrl
-        description : url of the background image of the trip
-        in : formData
-        type : string
-        required: false
-      - name : startDate
-        description : start date of the trip
-        in : formData
-        type : date
-        required : false
-    responses:
-      '200':
-        description: OK
-  get: 
-    summary: get all trip
-    tags:
-      - Trip
-    responses:
-      '200':
-        description: OK
+securityDefinitions:  
+  JWT:  
+    type: apiKey  
+    in: header  
+    name: JWT token 
 
-/api/trip/{id}:
+/api/trip/:
   get:
-    summary: get trip by id
     tags:
       - Trip
-    parameters:
-      - name : id
-        type: integer
-        in: path
-        description: id of the trip
-        required : true
     responses:
-      '200':
-        description: OK
-  delete:
-    summary: delete trip by id
+      '200': 
+        description: all trip in database
+
+/api/trip/{tripId}:
+  get:
     tags:
       - Trip
     parameters:
-      - name : id
+      - in: path
+        name: tripId
+        type: integer
+    responses:
+      '200': 
+        description: all trip in database where id eqal to the idTrip
+      '404':
+        description: not trip found with this id
+
+/api/user/{id}/trip/:
+  get: 
+    tags:
+      - Trip
+    security:
+      - JWT: []
+    parameters:
+      - in: path
+        name: id
+        type: integer
+    responses:
+      '200': 
+        description: all trip belonging to the user
+      '404':
+        description: no user or trip find
+      '401':
+        description: you are not authorized to perform this action whiout token
+  post:
+    tags:
+      - Trip
+    security:
+      - JWT: []
+    parameters:
+      - name: id
         in: path
+        type: integer
+      - name: title
+        in: formData
+        type: string
         required: true
-        type: integer
-        description: description of the id
-    responses:
-      '200':
-        description: OK
+      - name: description
+        in: formData
+        type: string
+      - name: backgroundUrl
+        in: formData
+        type: string
+      - name: startDate
+        in: formData
+        type: date
+
+/api/user/{id}/trip/{tripId}:
   put:
-    summary: modify a trip
     tags:
       - Trip
+    security:
+      - JWT: []
     parameters:
-      - name : id
+      - name: id
         in: path
-        required: true
         type: integer
-        description: id of the trip who want modify
-      - name : title
+      - name: title
         in: formData
-        required: false
         type: string
-        description: new title of the trip
-      - name : description
+        required: true
+      - name: description
         in: formData
-        required: false
         type: string
-        description: new description of the trip
-      - name : backgroundUrl
+      - name: backgroundUrl
         in: formData
-        required: false
         type: string
-        description: new background image of the trip
-      - name : startDate
-        in: date
-        required: false
-        type: string
-        description: new start date of the trip
-    responses:
-      '200':
-        description: Ok
+      - name: startDate
+        in: formData
+        type: date

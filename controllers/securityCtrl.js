@@ -58,7 +58,8 @@ module.exports = {
               userId: user.id,
               token: jwt.sign(
                 {
-                  userName: user.username,
+                  password: user.password,
+                  id: user.id,
                 },
                 "RANDOM_TOKEN",
                 {

@@ -1,14 +1,33 @@
-module.exports = (sequelize, Datatypes) => {
-    const Poi = sequelize.define("Poi", {
-        title: Datatypes.STRING,
-        description: Datatypes.STRING,
-        longitude: Datatypes.DOUBLE,
-        latitude: Datatypes.DOUBLE,
-    });
-    
-    Poi.associate = function (models) {
-        models.Poi.belongsTo(models.Poitype)
-    };
+const { Sequelize } = require("sequelize");
 
-    return Poi
-}
+module.exports = (sequelize) => {
+  class Poi extends Sequelize.Model {
+    static associate(db) {
+      Poi.belongsToMany(db.Day, { through: "DayPoi" });
+    }
+  }
+
+  Poi.init(
+    {
+      title: {
+        type: Sequelize.STRING,
+      },
+      descripion: {
+        type: Sequelize.STRING,
+      },
+      latitude: {
+        type: Sequelize.DOUBLE,
+      },
+      longitude: {
+        type: Sequelize.DOUBLE,
+      },
+    },
+    {
+      sequelize,
+      modelName: "Poi",
+      timestamps: false,
+    }
+  );
+
+  return Poi;
+};

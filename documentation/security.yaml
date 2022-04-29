@@ -32,14 +32,14 @@
         description: username of the user
         in: formData
         required: true
-      - name: password of the user
+      - name: password
         description: password of the username
         in: formData
         type: string
         required: true
     responses:
         '401':
-          description: Wrong data
+          description: Unauthorized
         '200':
           description: OK
         '500':
