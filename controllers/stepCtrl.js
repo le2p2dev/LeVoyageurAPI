@@ -30,11 +30,15 @@ module.exports = {
         TripId: trip.id,
       });
 
-      for (let number = 1; number < duration; number++) {
-        await db.Day.create({
-          number: number,
+      req.step = data;
+
+      for (let index = 1; index <= req.body.duration; index++) {
+        const day = db.Day.build({
+          number: index,
           StepId: req.step.id,
         });
+
+        day.save();
       }
 
       return res.status(201).send(data);
@@ -69,6 +73,23 @@ module.exports = {
       return res.status(201).send(newData);
     } catch (err) {
       const error = new Error("Modification failed");
+      error.code = 500;
+      next(error);
+    }
+  },
+
+  async delete(req, res, next) {
+    try {
+      const nb = await db.Step.destroy({ where: { id: req.params.stepId } });
+
+      if (nb > 0) res.status(201).send("step deleted");
+      else {
+        const error = new Error("step not found");
+        error.code = 404;
+        next(error);
+      }
+    } catch (err) {
+      const error = new Error("Internal error " + err);
       error.code = 500;
       next(error);
     }
