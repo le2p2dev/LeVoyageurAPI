@@ -23,11 +23,6 @@ module.exports = [
     func: [auth, dayCtrl.getByTrip],
   },
   {
-    url: "/api/user/:id/trip/:tripId/step/:stepId/day/",
-    method: "post",
-    func: [auth, dayCtrl.create],
-  },
-  {
     url: "/api/user/:id/trip/:tripId/step/:stepId/day/:dayId",
     method: "put",
     func: [auth, dayCtrl.update],

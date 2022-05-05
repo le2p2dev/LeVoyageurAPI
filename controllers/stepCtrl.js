@@ -1,4 +1,5 @@
 const db = require("../models/");
+const dayCtrl = require("../controllers/dayCtrl");
 
 module.exports = {
   async getAll(req, res, next) {
@@ -10,14 +11,17 @@ module.exports = {
   },
 
   async create(req, res, next) {
-    const trip = await db.Trip.findOne({ where: { id: req.trip.id } });
+    const trip = req.trip;
 
     if (!trip) {
       return res.status(404).send("trip not found");
     }
 
+    if (!req.body.longitude || !req.body.latitude)
+      return res.status(406).send("Latitude or longitude missing");
+
     try {
-      await db.Step.create({
+      const data = await db.Step.create({
         title: req.body.title,
         description: req.body.description,
         duration: req.body.duration,
@@ -25,6 +29,15 @@ module.exports = {
         latitude: req.body.latitude,
         TripId: trip.id,
       });
+
+      for (let number = 1; number < duration; number++) {
+        await db.Day.create({
+          number: number,
+          StepId: req.step.id,
+        });
+      }
+
+      return res.status(201).send(data);
     } catch (err) {
       const error = new Error(err);
       error.code = 500;
@@ -37,8 +50,8 @@ module.exports = {
   },
 
   async update(req, res, next) {
-    if (!req.trip.id) {
-      return res.status(404).send("No trip found");
+    if (!req.step) {
+      return res.status(404).send("No step found");
     }
 
     if (req.body.title) req.step.title = req.body.title;
@@ -47,9 +60,9 @@ module.exports = {
 
     if (req.body.duration) req.step.duration = req.body.duration;
 
-    if (req.body.latitude) req.body.latitude = req.body.latitude;
+    if (req.body.latitude) req.step.latitude = req.body.latitude;
 
-    if (req.body.longitude) req.body.longitude = req.body.longitude;
+    if (req.body.longitude) req.step.longitude = req.body.longitude;
 
     try {
       const newData = await req.step.save();

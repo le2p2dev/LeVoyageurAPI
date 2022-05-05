@@ -10,9 +10,8 @@ module.exports = {
   },
 
   async create(req, res, next) {
-    const user = await db.User.findOne({ where: { id: req.user.id } });
-
-    if (!user) {
+    console.log(req.user);
+    if (!req.user) {
       return res.status(404).send("User not found");
     }
 
@@ -22,9 +21,10 @@ module.exports = {
         description: req.body.description,
         backgroundUrl: req.body.backgroundUrl,
         startDate: req.body.startDate,
-        owner: user.id,
+        owner: req.user.id,
       });
-      await user.addTrips(trip);
+
+      await req.user.addTrips(trip);
 
       return res.status(200).send(trip);
     } catch (err) {

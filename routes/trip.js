@@ -8,7 +8,7 @@ module.exports = [
     func: [tripCtrl.getAll],
   },
   {
-    url: "/api/trip/:idTrip",
+    url: "/api/trip/:tripId",
     method: "get",
     func: [tripCtrl.getById],
   },
