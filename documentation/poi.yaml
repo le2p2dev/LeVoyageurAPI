@@ -4,87 +4,71 @@ securityDefinitions:
     in: header  
     name: JWT token 
 
-/api/poi/:
+/api/user/{id}/trip/{tripId}/poi:
   get:
     tags:
-      - Point of interest
-    responses:
-      '200': 
-        description: all poi in database
-
-/api/poi/{poiI}:
-  get:
-    tags:
-      - Point of interest
-    parameters:
-      - in: path
-        name: poiId
-        type: integer
-    responses:
-      '200': 
-        description: all day in database where id eqal to the dayId
-      '404':
-        description: not day found with this id
-
-/api/user/{id}/trip/{tripId}/step/{stepId}/day:
-  get: 
-    tags:
-      - Point of interest
+      - Point Of Interest
     security:
       - JWT: []
     parameters:
-      - in: path
-        name: id
-        type: integer
-      - name: tripId
+      - name: id
+        description: user id
         in: path
         type: integer
-    responses:
-      '200': 
-        description: all day belonging to the step
-      '404':
-        description: no user or trip find
+      - name: tripId
+        description: id of the trip
+        in: path
+        type: integer
+    response:
+      '200':
+        description: ok
       '401':
-        description: you are not authorized to perform this action whiout token
+        description: not authorized
 
-  post:
+/api/user/{id}/trip/{tripId}/day/{dayId}/poi:
+  get:
     tags:
-      - Point of interest
+      - Point Of Interest
     security:
       - JWT: []
     parameters:
       - name: id
+        description: user id
         in: path
         type: integer
       - name: tripId
-        in: path
-        type: integer
-      - name: stepId
-        in: path
-        type: integer
-      - name: number
-        in: formData
-        type: integer
-
-/api/user/{id}/trip/{tripId}/step/{stepId}/day/{dayId}:
-  put:
-    tags:
-      - Point of interest
-    security:
-      - JWT: []
-    parameters:
-      - name: id
-        in: path
-        type: integer
-      - name: tripId
-        in: path
-        type: integer
-      - name: stepId
+        description: id of the trip
         in: path
         type: integer
       - name: dayId
+        description: id of the day
+        type: integer
+        in: path
+    response:
+      '200':
+        description: ok
+      '401':
+        description: not authorized
+
+/api/user/{id}/trip/{tripId}/step/{stepId}/day/{dayId}/poi:
+  post:
+    tags:
+      - Point Of Interest
+    security:
+      - JWT: []
+    parameters:
+      - name: id
+        description: user id
         in: path
         type: integer
-      - name: number
-        in: formData
+      - name: tripId
+        description: id of the trip
+        in: path
         type: integer
+      - name: stepId
+      - name: dayId
+    response:
+      '201':
+        description: ok
+      '401':
+        description: not authorized

@@ -2,7 +2,7 @@ securityDefinitions:
   JWT:  
     type: apiKey  
     in: header  
-    name: JWT token 
+    name: Bearer
 
 /api/trip/:
   get:
@@ -65,6 +65,9 @@ securityDefinitions:
       - name: startDate
         in: formData
         type: date
+    responses:
+      '201':
+        description: insertion ok
 
 /api/user/{id}/trip/{tripId}:
   put:
