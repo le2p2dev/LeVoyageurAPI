@@ -60,9 +60,28 @@ module.exports = {
       const newData = await req.trip.save();
       return res.status(201).send(newData);
     } catch (err) {
-      const error = new Error("Modification failed");
+      const error = new Error("Modification failed" + err);
       error.code = 500;
       next(error);
     }
+  },
+
+  async delete(req, res, next) {
+    try {
+			const nb = await db.Trip.destroy({ where: { id: req.params.tripId } });
+
+			if (nb > 0)
+				res.status(201).send("trip deleted");
+			else {
+				const error = new Error("trip not found");
+				error.code = 404;
+				next(error);
+			}
+		}
+		catch (err) {
+			const error = new Error("Internal error " + err);
+			error.code = 500;
+			next(error);
+		}
   },
 };

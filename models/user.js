@@ -4,6 +4,7 @@ module.exports = (sequelize) => {
   class User extends Sequelize.Model {
     static associate(db) {
       User.belongsToMany(db.Trip, { through: "UserTrips" });
+      User.hasMany(db.Poi);
     }
   }
 

@@ -15,7 +15,7 @@ module.exports = [
   {
     url: "/api/user/:id/trip/:tripId/poi",
     method: "get",
-    func: [auth, poiCtrl.getByTrip],
+    func: [auth, poiCtrl.getByDay],
   },
   {
     url: "/api/user/:id/trip/:tripId/day/:dayId/poi",
@@ -23,13 +23,23 @@ module.exports = [
     func: [auth, poiCtrl.getByTrip],
   },
   {
-    url: "/api/user/:id/trip/:tripId/step/:stepId/day/:dayId/poi",
+    url: "/api/user/:id/trip/:tripId/poi",
     method: "post",
     func: [auth, poiCtrl.create],
   },
   {
-    url: "/api/user/:id/trip/:tripId/step/:stepId/day/:dayId/poi/:poiId",
+    url: "/api/user/:id/trip/:tripId/poi/:poiId",
     method: "put",
     func: [auth, poiCtrl.update],
+  },
+  {
+    url: "/api/user/:id/trip/:tripId/poi/:poiId",
+    method: "delete",
+    func: [auth, poiCtrl.delete],
+  },
+  {
+    url: "/api/user/:id/trip/:tripId/step/:stepId/poi/:poiId",
+    method: "put",
+    func: [auth, poiCtrl.deleteFromStep],
   },
 ];

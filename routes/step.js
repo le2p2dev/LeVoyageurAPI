@@ -27,4 +27,9 @@ module.exports = [
     method: "put",
     func: [auth, stepCtrl.update],
   },
+  {
+    url: "/api/user/:userId/trip/:tripId/step/:stepId",
+    method: "delete",
+    func: [auth, stepCtrl.delete],
+  },
 ];

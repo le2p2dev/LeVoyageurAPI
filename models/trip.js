@@ -3,10 +3,10 @@ const { Sequelize } = require("sequelize");
 module.exports = (sequelize) => {
   class Trip extends Sequelize.Model {
     static associate(db) {
-      Trip.belongsTo(db.User, { foreignKey: "owner" });
+      Trip.belongsTo(db.User, { foreignKey: "owner", onDelete: "CASCADE" });
       Trip.belongsToMany(db.User, { through: "UserTrips" });
-      Trip.hasMany(db.Step);
-      Trip.hasMany(db.Poi);
+      Trip.hasMany(db.Step, { onDelete: "CASCADE" });
+      Trip.hasMany(db.Poi, { onDelete: "CASCADE" });
     }
   }
 

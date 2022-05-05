@@ -57,6 +57,19 @@ app.use("/api/user/:id/trip/:tripId/ride/:rideId", (req, res, next) => {
   rideMiddleware.loadRide(req, res, next);
 });
 
+app.use("/api/user/:id/trip/:tripId/poi/:poiId", (req, res, next) => {
+  const poiMiddleware = require("../middleware/loadPoi");
+  poiMiddleware.loadPoi(req, res, next);
+});
+
+app.use(
+  "/api/user/:id/trip/:tripId/step/:stepId/poi/:poiId",
+  (req, res, next) => {
+    const poiMiddleware = require("../middleware/loadPoi");
+    poiMiddleware.loadPoi(req, res, next);
+  }
+);
+
 app.use(
   "/api/user/:id/trip/:tripId/step/:stepId/day/:dayId",
   (req, res, next) => {
