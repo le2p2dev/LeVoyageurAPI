@@ -59,17 +59,12 @@ module.exports = {
       return res.status(404).send("No POI found");
     }
 
-    const step = await db.Step.findByPk(req.body.stepId);
-
-    if (!step) {
-      return res.status(404).send("No step found");
-    }
-
     if (req.body.title) req.poi.title = req.body.title;
     if (req.body.description) req.poi.description = req.body.description;
     if (req.body.longitude) req.poi.longitude = req.body.longitude;
     if (req.body.latitude) req.poi.latitude = req.body.latitude;
     if (req.body.stepId) req.poi.StepId = req.body.stepId;
+    if (req.body.dayId) req.poi.DayId = req.body.dayId;
 
     try {
       const newData = await req.poi.save();

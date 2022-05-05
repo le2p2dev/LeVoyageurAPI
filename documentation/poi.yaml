@@ -1,74 +1,241 @@
-securityDefinitions:  
-  JWT:  
-    type: apiKey  
-    in: header  
-    name: JWT token 
-
 /api/user/{id}/trip/{tripId}/poi:
-  get:
-    tags:
-      - Point Of Interest
-    security:
-      - JWT: []
-    parameters:
-      - name: id
-        description: user id
-        in: path
-        type: integer
-      - name: tripId
-        description: id of the trip
-        in: path
-        type: integer
-    response:
-      '200':
-        description: ok
-      '401':
-        description: not authorized
-
-/api/user/{id}/trip/{tripId}/day/{dayId}/poi:
-  get:
-    tags:
-      - Point Of Interest
-    security:
-      - JWT: []
-    parameters:
-      - name: id
-        description: user id
-        in: path
-        type: integer
-      - name: tripId
-        description: id of the trip
-        in: path
-        type: integer
-      - name: dayId
-        description: id of the day
-        type: integer
-        in: path
-    response:
-      '200':
-        description: ok
-      '401':
-        description: not authorized
-
-/api/user/{id}/trip/{tripId}/step/{stepId}/day/{dayId}/poi:
   post:
     tags:
-      - Point Of Interest
+      - Point of Interest
+    summary: create poi
     security:
-      - JWT: []
+        - bearerAuth: [ ]
     parameters:
       - name: id
         description: user id
         in: path
         type: integer
+        required: true
       - name: tripId
-        description: id of the trip
-        in: path
+        description: trip id
         type: integer
-      - name: stepId
-      - name: dayId
-    response:
-      '201':
-        description: ok
+        required: true
+      - name: latitude
+        description: latitude of the poi
+        in: path
+        type: number
+        required: true
+      - name: longitude
+        description: longitude of the poi
+        in: path
+        type: number
+        required: true
+    responses:
+      '200':
+        description: poi created successfully 
       '401':
         description: not authorized
+      '500':
+        description: server error
+  get:
+    tags:
+      - Point of Interest
+    summary: get pois from trip
+    security:
+      - bearerAuth: [ ]
+    parameters:
+      - name: id
+        description: user id
+        in: path
+        type: integer
+        required: true
+      - name: tripId
+        description: trip id
+        type: integer
+        required: true
+    responses:
+      '200':
+        description: all pois from trip
+      '401':
+        description: not authorized
+      '500':
+        description: server error
+
+/api/user/{id}/trip/{tripId}/step/{stepId}/poi: 
+  get:
+    tags:
+      - Point of Interest
+    summary: get all pois from step
+    security:
+      - bearerAuth: [ ]
+    parameters:
+      - name: id
+        description: user id
+        in: path
+        type: integer
+        required: true
+      - name: tripId
+        description: trip id
+        type: integer
+        required: true
+      - name: stepId
+        description: step id
+        type: integer
+        required: true
+    responses:
+      '200':
+        description: all pois from step
+      '401':
+        description: not authorized
+      '500':
+        description: server error
+
+/api/user/{id}/trip/{tripId}/step/{stepId}/day/{dayId}:
+  get:
+    tags:
+      - Point of Interest
+    summary: get all pois from day
+    security:
+      - bearerAuth: [ ]
+    parameters:
+      - name: id
+        description: user id
+        in: path
+        type: integer
+        required: true
+      - name: tripId
+        description: trip id
+        type: integer
+        required: true
+      - name: stepId
+        description: step id
+        type: integer
+        required: true
+      - name: dayId
+        description: day id
+        type: integer
+        required: true
+    responses:
+      '200':
+        description: all pois from day
+      '401':
+        description: not authorized
+      '500':
+        description: server error
+
+/api/user/{id}/trip/{tripId}/poi/{poiId}:
+  put:
+    tags:
+      - Point of Interest
+    summary: update poi
+    security:
+      - bearerAuth: [ ]
+    parameters:
+      - name: id
+        description: user id
+        in: path
+        type: integer
+        required: true
+      - name: tripId
+        description: trip id
+        type: integer
+        in: path
+        required: true
+      - name: poiId
+        in: path
+        description: poi id
+        type: integer
+        required: true
+      - name: latitude
+        description: new latitude of the poi
+        type: number
+        in: formData
+      - name: longitude
+        description: new longitude of the poi
+        type: number
+        in: formData
+      - name: title
+        description: new title of the poi
+        type: string
+        in: formData
+      - name: description
+        description: new description of the poi
+        type: string
+        in: formData
+      - name: stepId
+        description: new stepId of the poi
+        type: integer
+        in: formData
+      - name: dayId
+        description: new dayId of the poi
+        type: integer
+        in: formData
+    responses:
+      '200':
+        description: poi updated successfully
+      '401':
+        description: not authorized
+      '500':
+        description: server error
+
+/api/user/:id/trip/:tripId/poi/:poiId:
+  delete:
+    tags:
+      - Point of Interest
+    summary: delete poi
+    security:
+      - bearerAuth: [ ]
+    parameters:
+      - name: id
+        description: user id
+        in: path
+        type: integer
+        required: true
+      - name: tripId
+        description: trip id
+        type: integer
+        in: path
+        required: true
+      - name: poiId
+        in: path
+        description: poi id
+        type: integer
+        required: true
+    responses:
+      '200':
+        description: poi deleted successfully
+      '401':
+        description: not authorized
+      '500':
+        description: server error
+
+/api/user/{id}/trip/{tripId}/step/{stepId}/poi/{poiId}:
+  put:
+    tags:
+      - Point of Interest
+    summary: delete poi from step
+    security:
+      - bearerAuth: [ ]
+    parameters:
+      - name: id
+        description: user id
+        in: path
+        type: integer
+        required: true
+      - name: tripId
+        description: trip id
+        in: path
+        type: integer
+        required: true
+      - name: stepId
+        description: step id
+        in: path
+        type: integer
+        required: true
+      - name: poiId
+        in: path
+        description: day id
+        type: integer
+        required: true
+    responses:
+      '200':
+        description: poi deleted successfully
+      '401':
+        description: not authorized
+      '500':
+        description: server error
