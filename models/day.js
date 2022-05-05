@@ -4,6 +4,7 @@ module.exports = (sequelize) => {
   class Day extends Sequelize.Model {
     static associate(db) {
       Day.belongsToMany(db.Poi, { through: "DayPoi" });
+      Day.hasMany(db.Poi);
     }
   }
 
