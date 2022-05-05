@@ -26,7 +26,7 @@ securityDefinitions:
       '404':
         description: not day found with this id
 
-/api/user/{id}/trip/{tripId}/step/{stepId}/day/{dayId}/poi:
+/api/user/{id}/trip/{tripId}/step/{stepId}/day:
   get: 
     tags:
       - Day
@@ -46,25 +46,6 @@ securityDefinitions:
         description: no user or trip find
       '401':
         description: you are not authorized to perform this action whiout token
-
-  post:
-    tags:
-      - Day
-    security:
-      - JWT: []
-    parameters:
-      - name: id
-        in: path
-        type: integer
-      - name: tripId
-        in: path
-        type: integer
-      - name: stepId
-        in: path
-        type: integer
-      - name: number
-        in: formData
-        type: integer
 
 /api/user/{id}/trip/{tripId}/step/{stepId}/day/{dayId}:
   put:
@@ -88,3 +69,8 @@ securityDefinitions:
       - name: number
         in: formData
         type: integer
+    responses:
+      '201':
+        description: ok
+      '401':
+        description: not authorizeds
