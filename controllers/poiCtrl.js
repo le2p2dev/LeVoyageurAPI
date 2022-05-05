@@ -15,6 +15,12 @@ module.exports = {
     return res.status(200).send(await req.day.getPois());
   },
 
+  async getByStep(req, res, next) {
+    if (!req.step) res.status(404).send("No step found");
+
+    return res.status(200).send(await req.step.getPois());
+  },
+
   async getByTrip(req, res, next) {
     if (!req.trip) res.status(404).send("No trip found");
 
@@ -77,21 +83,19 @@ module.exports = {
 
   async delete(req, res, next) {
     try {
-			const nb = await db.Poi.destroy({ where: { id: req.params.poiId } });
+      const nb = await db.Poi.destroy({ where: { id: req.params.poiId } });
 
-			if (nb > 0)
-				res.status(201).send("poi deleted");
-			else {
-				const error = new Error("Poi not found");
-				error.code = 404;
-				next(error);
-			}
-		}
-		catch (err) {
-			const error = new Error("Internal error " + err);
-			error.code = 500;
-			next(error);
-		}
+      if (nb > 0) res.status(201).send("poi deleted");
+      else {
+        const error = new Error("Poi not found");
+        error.code = 404;
+        next(error);
+      }
+    } catch (err) {
+      const error = new Error("Internal error " + err);
+      error.code = 500;
+      next(error);
+    }
   },
 
   async deleteFromStep(req, res, next) {
