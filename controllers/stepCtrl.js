@@ -30,17 +30,6 @@ module.exports = {
         TripId: trip.id,
       });
 
-      req.step = data;
-
-      for (let index = 1; index <= req.body.duration; index++) {
-        const day = db.Day.build({
-          number: index,
-          StepId: req.step.id,
-        });
-
-        day.save();
-      }
-
       return res.status(201).send(data);
     } catch (err) {
       const error = new Error(err);
@@ -70,6 +59,16 @@ module.exports = {
 
     try {
       const newData = await req.step.save();
+      req.step = newData;
+
+      for (let index = 1; index <= req.body.duration; index++) {
+        const day = db.Day.build({
+          number: index,
+          StepId: req.step.id,
+        });
+
+        day.save();
+      }
       return res.status(201).send(newData);
     } catch (err) {
       const error = new Error("Modification failed");
