@@ -18,6 +18,11 @@ module.exports = [
     func: [auth, tripCtrl.create],
   },
   {
+    url: "/api/user/:id/trip/:idTrip",
+    method: "get",
+    func: [auth, tripCtrl.getById],
+  },
+  {
     url: "/api/user/:id/trip/",
     method: "get",
     func: [auth, tripCtrl.getByUser],
