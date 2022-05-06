@@ -12,7 +12,7 @@ module.exports = (sequelize) => {
       title: {
         type: Sequelize.STRING,
       },
-      descripion: {
+      description: {
         type: Sequelize.STRING,
       },
       latitude: {
