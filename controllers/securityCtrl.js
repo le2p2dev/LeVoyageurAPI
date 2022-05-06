@@ -44,14 +44,14 @@ module.exports = {
     })
       .then((user) => {
         if (!user) {
-          return res.status(401).send("wrong login");
+          return res.status(401).send({error:"Wrong password"});
         }
 
         bcrypt
           .compare(req.body.password, user.password)
           .then((valid) => {
             if (!valid) {
-              return res.status(401).send("wrong password");
+              return res.status(401).send({error:"Wrong password"});
             }
 
             return res.status(200).send({
