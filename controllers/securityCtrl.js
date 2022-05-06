@@ -44,7 +44,7 @@ module.exports = {
     })
       .then((user) => {
         if (!user) {
-          return res.status(401).send("wrong login");
+          return res.status(401).send({error:"wrong password"});
         }
 
         bcrypt
