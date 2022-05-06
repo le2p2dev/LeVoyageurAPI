@@ -51,7 +51,7 @@ module.exports = {
           .compare(req.body.password, user.password)
           .then((valid) => {
             if (!valid) {
-              return res.status(401).send("wrong password");
+              return res.status(401).send({error:"wrong password"});
             }
 
             return res.status(200).send({
