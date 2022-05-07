@@ -13,7 +13,7 @@ module.exports = [
     func: poiCtrl.getById,
   },
   {
-    url: "/api/user/:id/trip/:tripId/step/:stepId/day/:dayId",
+    url: "/api/user/:id/trip/:tripId/step/:stepId/day/:dayId/poi",
     method: "get",
     func: [auth, poiCtrl.getByDay],
   },
