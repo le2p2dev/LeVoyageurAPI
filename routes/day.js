@@ -18,6 +18,11 @@ module.exports = [
     func: [auth, dayCtrl.getByStep],
   },
   {
+    url: "/api/user/:id/trip/:tripId/step/:stepId/day/:dayId",
+    method: "get",
+    func: [auth, dayCtrl.getById],
+  },
+  {
     url: "/api/user/:id/trip/:tripId/day/",
     method: "get",
     func: [auth, dayCtrl.getByTrip],
