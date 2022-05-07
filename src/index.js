@@ -63,20 +63,21 @@ app.use("/api/user/:id/trip/:tripId/poi/:poiId", (req, res, next) => {
 });
 
 app.use(
-  "/api/user/:id/trip/:tripId/step/:stepId/poi/:poiId",
+  "/api/user/:id/trip/:tripId/step/:stepId/day/:dayId/",
+  (req, res, next) => {
+    const dayMiddleware = require("../middleware/loadDay");
+    dayMiddleware.loadDay(req, res, next);
+  }
+);
+
+app.use(
+  "/api/user/:id/trip/:tripId/step/:stepId/day/:dayId/poi/:poiId",
   (req, res, next) => {
     const poiMiddleware = require("../middleware/loadPoi");
     poiMiddleware.loadPoi(req, res, next);
   }
 );
 
-app.use(
-  "/api/user/:id/trip/:tripId/step/:stepId/day/:dayId",
-  (req, res, next) => {
-    const dayMiddleware = require("../middleware/loadDay");
-    dayMiddleware.loadDay(req, res, next);
-  }
-);
 
 //************ Import des routes ************//
 require("../routes")(app);

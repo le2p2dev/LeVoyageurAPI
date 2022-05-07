@@ -10,20 +10,14 @@ module.exports = {
   },
 
   async getByDay(req, res, next) {
-    if (!req.day) res.status(404).send("No day found");
-
     return res.status(200).send(await req.day.getPois());
   },
 
   async getByStep(req, res, next) {
-    if (!req.step) res.status(404).send("No step found");
-
     return res.status(200).send(await req.step.getPois());
   },
 
   async getByTrip(req, res, next) {
-    if (!req.trip) res.status(404).send("No trip found");
-
     return res.status(200).send(await req.trip.getPois());
   },
 
