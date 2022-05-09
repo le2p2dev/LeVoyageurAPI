@@ -3,7 +3,7 @@ const db = require("../models/");
 module.exports = {
   async update(req, res, next) {
     if (!req.user) {
-      req.status(404).send("No user found");
+      req.status(404).json("No user found");
     }
 
     if (req.body.password) req.user.password = req.body.password;
@@ -11,7 +11,7 @@ module.exports = {
 
     try {
       const newData = await req.user.save();
-      return res.status(201).send(newData);
+      return res.status(201).json(newData);
     } catch (err) {
       const error = new Error("Modification failed");
       error.code = 500;
@@ -21,13 +21,13 @@ module.exports = {
 
   async delete(req, res, next) {
     if (!req.user) {
-      return res.status(404).send("No user found");
+      return res.status(404).json("No user found");
     }
 
     try {
       const nb = await db.User.destroy({ where: { id: req.user.id } });
 
-      if (nb > 0) res.status(201).send("user deleted");
+      if (nb > 0) res.status(201).json("user deleted");
       else {
         const error = new Error("user not found");
         error.code = 404;
