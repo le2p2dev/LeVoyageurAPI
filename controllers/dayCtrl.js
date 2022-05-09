@@ -10,8 +10,10 @@ module.exports = {
     return res.status(200).json(await req.day);
   },
 
-  async getByStep(req, res, next) {
-    return res.status(200).json(await req.step.getDays());
+ 
+  
+  async getByStep(req,res,next){
+    return await res.status(200).send({message: req.step.getDays()})
   },
 
   async getByTrip(req, res, next) {
