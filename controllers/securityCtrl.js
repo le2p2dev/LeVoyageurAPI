@@ -5,7 +5,7 @@ const jwt = require("jsonwebtoken");
 module.exports = {
   async signup(req, res, next) {
     if (!req.body.username || !req.body.password) {
-      return res.status(406).json("Data missing");
+      return res.status(406).send("Data missing");
     }
     const data = await db.User.findOne({
       where: { username: req.body.username },
@@ -14,7 +14,7 @@ module.exports = {
     if (data) {
       return res
         .status(406)
-        .json("User: " + req.body.username + " allready exist");
+        .send("User: " + req.body.username + " allready exist");
     }
 
     bcrypt
@@ -26,13 +26,13 @@ module.exports = {
         })
       )
       .then((data) => {
-        return res.status(201).json(data);
+        return res.status(201).send(data);
       })
       .catch((err) => {
-        return res.status(400).json(err);
+        return res.status(400).send(err);
       })
       .catch((err) => {
-        return res.status(500).json(err);
+        return res.status(500).send(err);
       });
   },
 
@@ -44,17 +44,17 @@ module.exports = {
     })
       .then((user) => {
         if (!user) {
-          return res.status(401).json({ error: "Wrong password" });
+          return res.status(401).send({ error: "Wrong password" });
         }
 
         bcrypt
           .compare(req.body.password, user.password)
           .then((valid) => {
             if (!valid) {
-              return res.status(401).json({ error: "Wrong password" });
+              return res.status(401).send({ error: "Wrong password" });
             }
 
-            return res.status(200).json({
+            return res.status(200).send({
               userId: user.id,
               token: jwt.sign(
                 {
@@ -68,9 +68,9 @@ module.exports = {
               ),
             });
           })
-          .catch((err) => res.status(500).json(err)); // server error
+          .catch((err) => res.status(500).send(err)); // server error
       })
-      .catch((err) => res.status(500).json(err)); // server error
+      .catch((err) => res.status(500).send(err)); // server error
   },
 
   // async whoami(req, res, next) {
@@ -84,6 +84,6 @@ module.exports = {
   //     }
   //   );
 
-  //   return res.status(200).json(token);
+  //   return res.status(200).send(token);
   // },
 };

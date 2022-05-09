@@ -3,19 +3,23 @@ const { Op } = require("sequelize");
 
 module.exports = {
   async getAll(req, res, next) {
-    return res.status(200).json(await db.Day.findAll());
+    return res.status(200).send(await db.Day.findAll());
   },
 
   async getById(req, res, next) {
-    return res.status(200).json(await req.day);
+    return res.status(200).send(await req.day);
   },
 
   async getByStep(req, res, next) {
-    return res.status(200).json(await req.step.getDays());
+    const data = await req.step.getDays();
+
+    if (!data) data = [];
+
+    return res.status(200).send(data);
   },
 
   async getByTrip(req, res, next) {
-    return res.status(200).json(await req.trip.getDays());
+    return res.status(200).send(await req.trip.getDays());
   },
 
   async update(req, res, next) {
@@ -25,7 +29,7 @@ module.exports = {
 
     try {
       const newData = await req.day.save();
-      return res.status(201).json(newData);
+      return res.status(201).send(newData);
     } catch (err) {
       const error = new Error("Modification failed");
       error.code = 500;
@@ -37,7 +41,7 @@ module.exports = {
     try {
       const nb = await db.Day.destroy({ where: { StepId: req.step.id } });
 
-      if (nb > 0) res.status(201).json("days deleted");
+      if (nb > 0) res.status(201).send("days deleted");
       else {
         const error = new Error("step not found");
         error.code = 404;
@@ -65,7 +69,7 @@ module.exports = {
           },
         });
 
-        if (nb > 0) res.status(201).json("days deleted");
+        if (nb > 0) res.status(201).send("days deleted");
         else {
           const error = new Error("day not found");
           error.code = 404;
@@ -98,7 +102,7 @@ module.exports = {
             });
           }
 
-          return res.status(200).json("ok");
+          return res.status(200).send("ok");
         } else {
           const error = new Error("day not found");
           error.code = 404;
@@ -132,7 +136,7 @@ module.exports = {
             element.save();
           });
 
-          return res.status(200).json("ok");
+          return res.status(200).send("ok");
         } else {
           const error = new Error("day not found");
           error.code = 404;
