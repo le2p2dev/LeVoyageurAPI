@@ -1,6 +1,6 @@
 module.exports = {
   test(req, res, next) {
-    return res.send({
+    return res.json({
       status: 200,
       response: "ok",
     });

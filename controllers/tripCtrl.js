@@ -2,17 +2,19 @@ const db = require("../models/");
 
 module.exports = {
   async getAll(req, res, next) {
-    return res.status(200).send(await db.Trip.findAll());
+    // return res.status(200).json(await db.Trip.findAll());
+    res.json(await db.Trip.findAll());
   },
 
   async getById(req, res, next) {
-    res.status(200).send(req.trip);
+    // res.status(200).json(req.trip);
+    res.json(req.trip);
   },
 
   async create(req, res, next) {
     console.log(req.user);
     if (!req.user) {
-      return res.status(404).send("User not found");
+      return res.status(404).json("User not found");
     }
 
     try {
@@ -26,7 +28,7 @@ module.exports = {
 
       await req.user.addTrips(trip);
 
-      return res.status(200).send(trip);
+      return res.status(200).json(trip);
     } catch (err) {
       const error = new Error(err);
       error.code = 500;
@@ -35,12 +37,12 @@ module.exports = {
   },
 
   async getByUser(req, res, next) {
-    return res.status(200).send(await req.user.getTrips());
+    return res.status(200).json(await req.user.getTrips());
   },
 
   async update(req, res, next) {
     if (!req.trip.id) {
-      return res.status(404).send("No trip found");
+      return res.status(404).json("No trip found");
     }
 
     if (req.body.title) {
@@ -58,7 +60,7 @@ module.exports = {
 
     try {
       const newData = await req.trip.save();
-      return res.status(201).send(newData);
+      return res.status(201).json(newData);
     } catch (err) {
       const error = new Error("Modification failed" + err);
       error.code = 500;
@@ -71,7 +73,7 @@ module.exports = {
 			const nb = await db.Trip.destroy({ where: { id: req.params.tripId } });
 
 			if (nb > 0)
-				res.status(201).send("trip deleted");
+				res.status(201).json("trip deleted");
 			else {
 				const error = new Error("trip not found");
 				error.code = 404;

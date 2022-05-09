@@ -2,32 +2,32 @@ const db = require("../models/");
 
 module.exports = {
   async getAll(req, res, next) {
-    return res.status(200).send(await db.Poi.findAll());
+    res.json(await db.Poi.findAll());
   },
 
   async getById(req, res, next) {
-    return res.status(200).send(await req.poi);
+    res.json(await req.poi);
   },
 
   async getByDay(req, res, next) {
-    return res.status(200).send(await req.day.getPois());
+    return res.status(200).json(await req.day.getPois());
   },
 
   async getByStep(req, res, next) {
-    return res.status(200).send(await req.step.getPois());
+    return res.status(200).json(await req.step.getPois());
   },
 
   async getByTrip(req, res, next) {
-    return res.status(200).send(await req.trip.getPois());
+    return res.status(200).json(await req.trip.getPois());
   },
 
   async create(req, res, next) {
     if (!req.body.latitude || !req.body.longitude) {
-      return res.status(406).send("Latitude or longitude missing");
+      return res.status(406).json("Latitude or longitude missing");
     }
 
     if (!req.trip) {
-      return res.status(404).send("Trip not found");
+      return res.status(404).json("Trip not found");
     }
 
     try {
@@ -40,7 +40,7 @@ module.exports = {
         UserId: req.user.id,
       });
 
-      return res.status(201).send(data);
+      return res.status(201).json(data);
     } catch (err) {
       const error = new Error(err);
       error.code = 500;
@@ -50,7 +50,7 @@ module.exports = {
 
   async update(req, res, next) {
     if (!req.poi) {
-      return res.status(404).send("No POI found");
+      return res.status(404).json("No POI found");
     }
 
     if (req.body.title) req.poi.title = req.body.title;
@@ -62,7 +62,7 @@ module.exports = {
 
     try {
       const newData = await req.poi.save();
-      return res.status(201).send(newData);
+      return res.status(201).json(newData);
     } catch (err) {
       const error = new Error("Modification failed: " + err);
       error.code = 500;
@@ -74,7 +74,7 @@ module.exports = {
     try {
       const nb = await db.Poi.destroy({ where: { id: req.params.poiId } });
 
-      if (nb > 0) res.status(201).send("poi deleted");
+      if (nb > 0) res.status(201).json("poi deleted");
       else {
         const error = new Error("Poi not found");
         error.code = 404;
@@ -89,14 +89,14 @@ module.exports = {
 
   async deleteFromStep(req, res, next) {
     if (!req.poi) {
-      return res.status(404).send("No POI found");
+      return res.status(404).json("No POI found");
     }
 
     req.poi.StepId = null;
 
     try {
       const newData = await req.poi.save();
-      return res.status(201).send(newData);
+      return res.status(201).json(newData);
     } catch (err) {
       const error = new Error("Modification failed: " + err);
       error.code = 500;
