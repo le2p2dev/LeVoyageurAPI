@@ -3,22 +3,22 @@ const dayCtrl = require("../controllers/dayCtrl");
 
 module.exports = {
   async getAll(req, res, next) {
-    return res.status(200).json(await db.Step.findAll());
+    return res.status(200).send(await db.Step.findAll());
   },
 
   async getById(req, res, next) {
-    res.status(200).json(req.step);
+    res.status(200).send(req.step);
   },
 
   async create(req, res, next) {
     const trip = req.trip;
 
     if (!trip) {
-      return res.status(404).json("trip not found");
+      return res.status(404).send("trip not found");
     }
 
     if (!req.body.longitude || !req.body.latitude)
-      return res.status(406).json("Latitude or longitude missing");
+      return res.status(406).send("Latitude or longitude missing");
 
     try {
       const data = await db.Step.create({
@@ -30,7 +30,7 @@ module.exports = {
         TripId: trip.id,
       });
 
-      return res.status(201).json(data);
+      return res.status(201).send(data);
     } catch (err) {
       const error = new Error(err);
       error.code = 500;
@@ -39,12 +39,12 @@ module.exports = {
   },
 
   async getByTrip(req, res, next) {
-    return res.status(200).json(await req.trip.getSteps());
+    return res.status(200).send(await req.trip.getSteps());
   },
 
   async update(req, res, next) {
     if (!req.step) {
-      return res.status(404).json("No step found");
+      return res.status(404).send("No step found");
     }
 
     const beforeUp = req.step.duration;
@@ -104,7 +104,7 @@ module.exports = {
         }
       }
 
-      return res.status(201).json(newData);
+      return res.status(201).send(newData);
     } catch (err) {
       const error = new Error("Modification failed " + err);
       error.code = 500;
@@ -116,7 +116,7 @@ module.exports = {
     try {
       const nb = await db.Step.destroy({ where: { id: req.params.stepId } });
 
-      if (nb > 0) res.status(201).json("step deleted");
+      if (nb > 0) res.status(201).send("step deleted");
       else {
         const error = new Error("step not found");
         error.code = 404;
