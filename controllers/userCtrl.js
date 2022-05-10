@@ -1,3 +1,4 @@
+const bcrypt = require("bcryptjs/dist/bcrypt");
 const db = require("../models/");
 
 module.exports = {
@@ -6,7 +7,11 @@ module.exports = {
       req.status(404).send("No user found");
     }
 
-    if (req.body.password) req.user.password = req.body.password;
+    if (req.body.password) {
+      const hashpassword = await bcrypt.hash(req.user.password, 10);
+      req.user.password = hashpassword;
+    }
+
     if (req.body.username) req.user.username = req.body.username;
 
     try {
@@ -38,5 +43,9 @@ module.exports = {
       error.code = 500;
       next(error);
     }
+  },
+
+  async getbyId(req, res, next) {
+    return res.status(202).send(req.user);
   },
 };
