@@ -36,41 +36,38 @@ module.exports = {
       });
   },
 
-  login(req, res, next) {
-    db.User.findOne({
+  async login(req, res, next) {
+    const user = await db.User.findOne({
       where: {
         username: req.body.username,
       },
-    })
-      .then((user) => {
-        if (!user) {
-          return res.status(401).send({ error: "Wrong password" });
+    });
+
+    if (!user) return res.status(404).send("No user found");
+
+    console.log(user);
+
+    const valid = await bcrypt.compare(req.body.password, user.password);
+
+    if (!valid) {
+      return res.status(401).send("Not authorized");
+    }
+
+    const data = {
+      userId: user.id,
+      token: jwt.sign(
+        {
+          password: user.password,
+          id: user.id,
+        },
+        "RANDOM_TOKEN",
+        {
+          expiresIn: "24h",
         }
+      ),
+    };
 
-        bcrypt
-          .compare(req.body.password, user.password)
-          .then((valid) => {
-            if (!valid) {
-              return res.status(401).send({ error: "Wrong password" });
-            }
-
-            return res.status(200).send({
-              userId: user.id,
-              token: jwt.sign(
-                {
-                  password: user.password,
-                  id: user.id,
-                },
-                "RANDOM_TOKEN",
-                {
-                  expiresIn: "24h",
-                }
-              ),
-            });
-          })
-          .catch((err) => res.status(500).send(err)); // server error
-      })
-      .catch((err) => res.status(500).send(err)); // server error
+    res.status(200).send(data);
   },
 
   // async whoami(req, res, next) {
