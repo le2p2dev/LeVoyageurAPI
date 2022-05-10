@@ -8,7 +8,7 @@ module.exports = {
     }
 
     if (req.body.password) {
-      const hashpassword = await bcrypt.hash(req.user.password, 10);
+      const hashpassword = await bcrypt.hash(req.body.password, 10);
       req.user.password = hashpassword;
     }
 
