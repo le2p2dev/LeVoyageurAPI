@@ -12,4 +12,9 @@ module.exports = [
     method: "delete",
     func: [auth, userCtrl.delete],
   },
+  {
+    url: "/api/user/:id",
+    method: "get",
+    func: [auth, userCtrl.getbyId],
+  },
 ];
