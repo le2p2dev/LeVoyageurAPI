@@ -15,7 +15,7 @@ module.exports = {
 
     if (!data) data = [];
 
-    return res.status(200).send(data);
+    return res.status(200).json(data);
   },
 
   async getByTrip(req, res, next) {
