@@ -15,6 +15,7 @@ module.exports = (sequelize) => {
         unique: true,
       },
       password: Sequelize.STRING,
+      avatar: Sequelize.STRING,
     },
     {
       sequelize,

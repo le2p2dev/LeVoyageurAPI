@@ -8,11 +8,13 @@ module.exports = {
     }
 
     if (req.body.password) {
-      const hashpassword = await bcrypt.hash(req.user.password, 10);
+      const hashpassword = await bcrypt.hash(req.body.password, 10);
       req.user.password = hashpassword;
     }
 
     if (req.body.username) req.user.username = req.body.username;
+
+    if (req.body.avatar) req.user.avatar = req.body.avatar;
 
     try {
       const newData = await req.user.save();
