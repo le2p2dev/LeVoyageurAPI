@@ -14,6 +14,8 @@ module.exports = {
 
     if (req.body.username) req.user.username = req.body.username;
 
+    if (req.body.avatar) req.user.avatar = req.body.avatar;
+
     try {
       const newData = await req.user.save();
       return res.status(201).send(newData);
