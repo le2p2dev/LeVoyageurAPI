@@ -2,14 +2,9 @@ const rideCtrl = require("../controllers/rideCtrl");
 const auth = require("../middleware/auth");
 
 module.exports = [
-  {
-    url: "/api/ride",
-    method: "get",
-    func: rideCtrl.getAll,
-  },
-  {
-    url: "/api/ride/:rideId",
-    method: "get",
-    func: rideCtrl.getAll,
-  },
+	{
+		url: "/api/user/:userId/trip/:tripId/ride",
+		method: "get",
+		func: [auth, rideCtrl.getAllByTrip],
+	},
 ];

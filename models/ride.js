@@ -6,13 +6,17 @@ module.exports = (sequelize) => {
   }
 
   Ride.init(
-    {},
-    {
-      sequelize,
-      modelName: "Ride",
-      timestamps: false,
-    }
-  );
+		{
+			order: {
+				type: Sequelize.INTEGER,
+			},
+		},
+		{
+			sequelize,
+			modelName: "Ride",
+			timestamps: false,
+		}
+	);
 
   return Ride;
 };

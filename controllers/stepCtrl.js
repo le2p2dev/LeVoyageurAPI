@@ -17,25 +17,75 @@ module.exports = {
       return res.status(404).send("trip not found");
     }
 
-    if (!req.body.longitude || !req.body.latitude)
-      return res.status(406).send("Latitude or longitude missing");
+    console.log(trip.title);
 
-    try {
-      const data = await db.Step.create({
-        title: req.body.title,
-        description: req.body.description,
-        duration: req.body.duration,
-        longitude: req.body.longitude,
-        latitude: req.body.latitude,
-        TripId: trip.id,
-      });
+		if (!req.body.longitude || !req.body.latitude)
+			return res.status(406).send("Latitude or longitude missing");
 
-      return res.status(201).send(data);
-    } catch (err) {
-      const error = new Error(err);
-      error.code = 500;
-      next(error);
-    }
+		const nbStep = await db.Step.count({
+			where: {
+				TripId: req.params.tripId,
+			},
+		});
+
+		console.log(nbStep);
+
+		try {
+			const data = await db.Step.create({
+				title: req.body.title,
+				description: req.body.description,
+				duration: req.body.duration,
+				longitude: req.body.longitude,
+				latitude: req.body.latitude,
+				TripId: req.params.tripId,
+				order: nbStep + 1,
+			});
+
+			const allRide = await db.Ride.findAll({
+				where: {
+					TripId: req.params.tripId,
+				},
+				order: [["order", "DESC"]],
+			});
+
+			console.log(allRide);
+
+			if (allRide.length == 0) {
+				db.Ride.create({
+					startStep: data.id,
+					TripId: req.params.tripId,
+					order: 1,
+				});
+
+				return res.status(201).send(data);
+			}
+
+			const lastride = allRide[0];
+			console.log(lastride);
+
+			if (lastride.endStep == null) {
+				lastride.endStep = data.id;
+				lastride.TripId = req.params.tripId;
+				lastride.save();
+
+				return res.status(201).send(data);
+			}
+
+			if (allRide.endStep !== null) {
+				db.Ride.create({
+					startStep: lastride.endStep,
+					endStep: data.id,
+					TripId: req.params.tripId,
+					order: lastride.order + 1,
+				});
+			}
+
+			return res.status(201).send(data);
+		} catch (err) {
+			const error = new Error(err);
+			error.code = 500;
+			next(error);
+		}
   },
 
   async getByTrip(req, res, next) {
