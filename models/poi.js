@@ -21,6 +21,9 @@ module.exports = (sequelize) => {
       longitude: {
         type: Sequelize.DOUBLE,
       },
+      category: {
+        type: Sequelize.STRING,
+      },
     },
     {
       sequelize,
