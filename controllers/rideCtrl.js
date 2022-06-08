@@ -1,9 +1,11 @@
 const db = require("../models/");
-const { Op } = require("sequelize");
 
 module.exports = {
 	async getAllByTrip(req, res, next) {
 		const data = await db.Ride.findAll({
+			include: {
+				all: true,
+			},
 			where: {
 				TripId: req.params.tripId,
 			},
