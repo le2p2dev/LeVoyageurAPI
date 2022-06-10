@@ -13,7 +13,6 @@ module.exports = {
 
   async getByStep(req, res, next) {
     const data = await req.step.getDays();
-
     return res.status(200).json(data);
   },
 
