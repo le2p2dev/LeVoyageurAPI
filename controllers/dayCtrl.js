@@ -7,13 +7,12 @@ module.exports = {
   },
 
   async getById(req, res, next) {
+    console.log(req.day);
     return res.status(200).send(await req.day);
   },
 
   async getByStep(req, res, next) {
     const data = await req.step.getDays();
-
-    if (!data) data = [];
 
     return res.status(200).json(data);
   },
