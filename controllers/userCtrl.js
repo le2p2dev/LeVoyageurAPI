@@ -1,10 +1,18 @@
 const bcrypt = require("bcryptjs/dist/bcrypt");
 const db = require("../models/");
+const fs = require("fs");
 
 module.exports = {
 	async update(req, res, next) {
 		if (!req.user) {
 			return res.status(404).send("No user found");
+		}
+
+		if (req.file) {
+			req.user.avatar = `${req.protocol}://${req.get("host")}/images/${
+				req.file.filename
+			}`;
+			return res.status(201).send("Avatar update");
 		}
 
 		if (!req.body.currentPassord) {
@@ -15,8 +23,6 @@ module.exports = {
 			req.body.currentPassord,
 			req.user.password
 		);
-
-		console.log(valid);
 
 		if (!valid) {
 			return res.status(401).send("Invalid current password");
@@ -44,6 +50,11 @@ module.exports = {
 	async delete(req, res, next) {
 		if (!req.user) {
 			return res.status(404).send("No user found");
+		}
+
+		if (req.user.avatar) {
+			const filename = req.user.avatar.split("/images/")[1];
+			fs.unlink(`images/${filename}`);
 		}
 
 		try {
