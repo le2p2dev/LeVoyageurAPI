@@ -16,10 +16,14 @@ module.exports = {
 			req.user.password
 		);
 
-		console.log(valid);
-
 		if (!valid) {
 			return res.status(401).send("Invalid current password");
+		}
+
+		if (req.file) {
+			req.user.avatar = `${req.protocol}://${req.get("host")}/images/${
+				req.file.filename
+			}`;
 		}
 
 		if (req.body.password) {
