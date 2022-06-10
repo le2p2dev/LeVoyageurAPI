@@ -12,7 +12,9 @@ module.exports = {
 			req.user.avatar = `${req.protocol}://${req.get("host")}/images/${
 				req.file.filename
 			}`;
-			return res.status(201).send("Avatar update");
+
+			const newData = await req.user.save();
+			return res.status(201).send(newData);
 		}
 
 		if (!req.body.currentPassord) {
@@ -54,7 +56,9 @@ module.exports = {
 
 		if (req.user.avatar) {
 			const filename = req.user.avatar.split("/images/")[1];
-			fs.unlink(`images/${filename}`);
+			fs.unlink(`images/${filename}`, (err) => {
+				if (err) console.log(err);
+			});
 		}
 
 		try {
