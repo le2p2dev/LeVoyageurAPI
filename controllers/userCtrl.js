@@ -12,15 +12,17 @@ module.exports = {
 			req.user.avatar = `${req.protocol}://${req.get("host")}/images/${
 				req.file.filename
 			}`;
-			return res.status(201).send("Avatar update");
+
+			const newData = await req.user.save();
+			return res.status(201).send(newData);
 		}
 
-		if (!req.body.currentPassord) {
+		if (!req.body.currentPassword) {
 			return res.status(406).send("No current password");
 		}
 
 		const valid = await bcrypt.compare(
-			req.body.currentPassord,
+			req.body.currentPassword,
 			req.user.password
 		);
 
@@ -54,7 +56,9 @@ module.exports = {
 
 		if (req.user.avatar) {
 			const filename = req.user.avatar.split("/images/")[1];
-			fs.unlink(`images/${filename}`);
+			fs.unlink(`images/${filename}`, (err) => {
+				if (err) console.log(err);
+			});
 		}
 
 		try {
