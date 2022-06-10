@@ -28,4 +28,9 @@ module.exports = [
 		method: "delete",
 		func: [auth, tripCtrl.delete],
 	},
+	{
+		url: "/api/user/:id/trip/:tripId/users",
+		method: "get",
+		func: [auth, tripCtrl.getUserFromTrip],
+	},
 ];
