@@ -17,12 +17,12 @@ module.exports = {
 			return res.status(201).send(newData);
 		}
 
-		if (!req.body.currentPassord) {
+		if (!req.body.currentPassword) {
 			return res.status(406).send("No current password");
 		}
 
 		const valid = await bcrypt.compare(
-			req.body.currentPassord,
+			req.body.currentPassword,
 			req.user.password
 		);
 
