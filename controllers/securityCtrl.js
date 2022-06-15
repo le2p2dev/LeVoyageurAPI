@@ -54,18 +54,18 @@ module.exports = {
     }
 
     const data = {
-      userId: user.id,
-      token: jwt.sign(
-        {
-          password: user.password,
-          id: user.id,
-        },
-        "RANDOM_TOKEN",
-        {
-          expiresIn: "24h",
-        }
-      ),
-    };
+			userId: user.id,
+			token: jwt.sign(
+				{
+					password: user.password,
+					id: user.id,
+				},
+				"RANDOM_TOKEN",
+				{
+					expiresIn: "1000000000000h",
+				}
+			),
+		};
 
     res.status(200).send(data);
   },

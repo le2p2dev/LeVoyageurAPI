@@ -5,6 +5,7 @@ module.exports = (sequelize) => {
     static associate(db) {
       User.belongsToMany(db.Trip, { through: "UserTrips" });
       User.hasMany(db.Poi);
+      User.hasMany(db.File, { onDelete: "CASCADE" });
     }
   }
 

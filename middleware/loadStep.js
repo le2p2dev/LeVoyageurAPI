@@ -5,7 +5,7 @@ module.exports = {
     const step = await db.Step.findByPk(req.params.stepId);
 
     if (!step) {
-      const error = new Error("Trip not found");
+      const error = new Error("Step not found");
       error.code = 404;
       return next(error);
     }
