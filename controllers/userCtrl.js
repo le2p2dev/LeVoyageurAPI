@@ -107,12 +107,13 @@ module.exports = {
 
 		return res.status(200).send(file);
 	},
+
 	async deleteFile(req, res, next) {
 		if (!req.params.idFile) {
-			return res.status(406).send("IdFile required");
+			return res.status(406).send("fileId required");
 		}
 
-		const data = await db.File.findByPk(req.params.idFile);
+		const data = await db.File.findByPk(req.params.fileId);
 
 		if (!data) {
 			return res.status(404).send("No file found");

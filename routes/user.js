@@ -24,7 +24,7 @@ module.exports = [
 		func: [auth, multer, userCtrl.addUserFile],
 	},
 	{
-		url: "/api/user/:id/file/:idFile",
+		url: "/api/user/:id/file/:fileId",
 		method: "delete",
 		func: [auth, multer, userCtrl.deleteFile],
 	},

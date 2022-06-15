@@ -124,7 +124,7 @@ module.exports = {
 		});
 
 		if (data) {
-			return res.status(409).send("File already exist for this user");
+			return res.status(409).send("File already exist for this trip");
 		}
 
 		const file = await db.File.create({
@@ -132,6 +132,8 @@ module.exports = {
 				req.file.filename
 			}`,
 		});
+
+		await req.user.addFile(file);
 		await req.trip.addFiles(file);
 
 		return res.status(200).send(file);
@@ -139,10 +141,10 @@ module.exports = {
 
 	async deleteFile(req, res, next) {
 		if (!req.params.idFile) {
-			return res.status(406).send("IdFile required");
+			return res.status(406).send("fileId required");
 		}
 
-		const data = await db.File.findByPk(req.params.idFile);
+		const data = await db.File.findByPk(req.params.fileId);
 
 		if (!data) {
 			return res.status(404).send("No file found");

@@ -39,7 +39,7 @@ module.exports = [
 		func: [auth, multer, tripCtrl.addFile],
 	},
 	{
-		url: "/api/user/:id/trip/:tripId/file/:idFile",
+		url: "/api/user/:id/trip/:tripId/file/:fileId",
 		method: "delete",
 		func: [auth, multer, tripCtrl.deleteFile],
 	},

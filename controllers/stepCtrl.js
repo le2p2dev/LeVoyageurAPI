@@ -1,19 +1,18 @@
 const db = require("../models/");
-const dayCtrl = require("../controllers/dayCtrl");
 const { Op } = require("sequelize");
 
 module.exports = {
-	async getAll(req, res, next) {
+	async getAll(res) {
 		return res.status(200).send(await db.Step.findAll({ include: db.Ride }));
 	},
 
-	async getById(req, res, next) {
+	async getById(req, res) {
 		res.status(200).send(req.step);
 	},
 
 	async create(req, res, next) {
 		const trip = req.trip;
-
+		console.log(req);
 		if (!trip) {
 			return res.status(404).send("trip not found");
 		}
@@ -23,7 +22,7 @@ module.exports = {
 
 		const nbStep = await db.Step.count({
 			where: {
-				TripId: req.params.tripId,
+				TripId: trip.id,
 			},
 		});
 
@@ -40,7 +39,7 @@ module.exports = {
 
 			const allRide = await db.Ride.findAll({
 				where: {
-					TripId: req.params.tripId,
+					TripId: trip.id,
 				},
 				order: [["order", "DESC"]],
 			});
@@ -83,7 +82,7 @@ module.exports = {
 		}
 	},
 
-	async getByTrip(req, res, next) {
+	async getByTrip(req, res) {
 		const data = await db.Step.findAll({
 			where: { TripId: req.params.tripId },
 		});
@@ -120,8 +119,6 @@ module.exports = {
 						StepId: req.step.id,
 					},
 				});
-
-				console.log(data.length - dif);
 
 				for (let index = data.length; index > data.length - dif; index--) {
 					console.log("i " + index);
@@ -248,5 +245,56 @@ module.exports = {
 			error.code = 500;
 			next(error);
 		}
+	},
+
+	async addFile(req, res, next) {
+		if (!req.file) {
+			return res.status(406).send("Image required");
+		}
+
+		const data = await db.File.findOne({
+			where: {
+				imageUrl: `${req.protocol}://${req.get("host")}/images/${
+					req.file.filename
+				}`,
+			},
+		});
+
+		if (data) {
+			return res.status(409).send("File already exist for this step");
+		}
+
+		const file = await db.File.create({
+			imageUrl: `${req.protocol}://${req.get("host")}/images/${
+				req.file.filename
+			}`,
+		});
+
+		await req.user.addFile(file);
+		await req.trip.addFiles(file);
+		await req.step.addFile(file);
+
+		return res.status(200).send(file);
+	},
+
+	async deleteFile(req, res, next) {
+		if (!req.params.idFile) {
+			return res.status(406).send("fileId required");
+		}
+
+		const data = await db.File.findByPk(req.params.fileId);
+
+		if (!data) {
+			return res.status(404).send("No file found");
+		}
+
+		await data.destroy();
+
+		const filename = data.imageUrl.split("/images/")[1];
+		fs.unlink(`images/${filename}`, (err) => {
+			if (err) console.log(err);
+		});
+
+		return res.status(201).send("file successfully deleted");
 	},
 };
