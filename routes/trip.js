@@ -33,4 +33,14 @@ module.exports = [
 		method: "get",
 		func: [auth, tripCtrl.getUserFromTrip],
 	},
+	{
+		url: "/api/user/:id/trip/:tripId/file",
+		method: "post",
+		func: [auth, multer, tripCtrl.addFile],
+	},
+	{
+		url: "/api/user/:id/trip/:tripId/file/:idFile",
+		method: "delete",
+		func: [auth, multer, tripCtrl.deleteFile],
+	},
 ];
