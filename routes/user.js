@@ -18,4 +18,14 @@ module.exports = [
 		method: "get",
 		func: [auth, userCtrl.getbyId],
 	},
+	{
+		url: "/api/user/:id/file",
+		method: "post",
+		func: [auth, multer, userCtrl.addUserFile],
+	},
+	{
+		url: "/api/user/:id/file/:idFile",
+		method: "delete",
+		func: [auth, multer, userCtrl.deleteFile],
+	},
 ];
