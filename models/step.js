@@ -5,6 +5,7 @@ module.exports = (sequelize) => {
     static associate(db) {
 			Step.hasMany(db.Day, { onDelete: "CASCADE" });
 			Step.hasMany(db.Poi);
+			Step.hasMany(db.File, { onDelete: "CASCADE" });
 		}
   }
 

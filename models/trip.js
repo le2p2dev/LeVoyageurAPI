@@ -8,6 +8,7 @@ module.exports = (sequelize) => {
 			Trip.hasMany(db.Step, { onDelete: "CASCADE" });
 			Trip.hasMany(db.Poi, { onDelete: "CASCADE" });
 			Trip.hasMany(db.Ride, { onDelete: "CASCADE" });
+			Trip.hasMany(db.File, { onDelete: "CASCADE" });
 		}
 	}
 
@@ -17,7 +18,7 @@ module.exports = (sequelize) => {
 				type: Sequelize.STRING,
 			},
 			description: {
-				type: Sequelize.STRING,
+				type: Sequelize.TEXT("long"),
 			},
 			backgroundUrl: {
 				type: Sequelize.STRING,
