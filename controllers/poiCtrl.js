@@ -58,16 +58,22 @@ module.exports = {
     if (req.body.longitude) req.poi.longitude = req.body.longitude;
     if (req.body.latitude) req.poi.latitude = req.body.latitude;
     if (req.body.stepId) req.poi.StepId = req.body.stepId;
-    if (req.body.dayId) req.poi.DayId = req.body.dayId;
 
-    try {
-      const newData = await req.poi.save();
-      return res.status(201).send(newData);
-    } catch (err) {
-      const error = new Error("Modification failed: " + err);
-      error.code = 500;
-      next(error);
-    }
+    const day = await db.Day.findByPk(req.body.dayId);
+
+		if (!day) {
+			return res.status(404).send("No day found");
+		}
+
+		try {
+			req.poi.addDays(day);
+			const newData = await req.poi.save();
+			return res.status(201).send(newData);
+		} catch (err) {
+			const error = new Error("Modification failed: " + err);
+			error.code = 500;
+			next(error);
+		}
   },
 
   async delete(req, res, next) {
