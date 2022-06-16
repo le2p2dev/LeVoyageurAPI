@@ -1,0 +1,973 @@
+{
+	"info": {
+		"_postman_id": "e3d1ddb2-a282-4e99-bd51-05e9c30129ac",
+		"name": "Scénario Test",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Create Account",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var jsonData = pm.response.json()",
+							"",
+							"pm.test(\"Status code is 201 (Account created)\", function () {",
+							"    pm.response.to.have.status(201);",
+							"});",
+							"",
+							"pm.test(\"set username and password\", ()=>{",
+							"        pm.collectionVariables.set(\"idUser\",jsonData.id)",
+							"})",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"username\":\"{{username}}\",\n    \"password\":\"{{password}}\"\n}\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://levoyageur.mathieuv.pro:3630/api/signup",
+					"protocol": "http",
+					"host": [
+						"levoyageur",
+						"mathieuv",
+						"pro"
+					],
+					"port": "3630",
+					"path": [
+						"api",
+						"signup"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Login",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var jsonData = pm.response.json()",
+							"",
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"pm.test(\"token exist\", () => {",
+							"    pm.expect(jsonData.token).to.not.be.undefined",
+							"})",
+							"",
+							"pm.test(\"Data request is not empty\" , () => {",
+							"    pm.expect(jsonData).to.not.be.empty",
+							"})",
+							"",
+							"pm.test(\"set token & user id variable\", () => {",
+							"    pm.collectionVariables.set(\"token\", jsonData.token)   ",
+							"    pm.collectionVariables.set(\"idUser\", jsonData.userId) ",
+							"})",
+							"",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"username\": \"{{username}}\",\n    \"password\": \"{{password}}\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://levoyageur.mathieuv.pro:3630/api/login",
+					"protocol": "http",
+					"host": [
+						"levoyageur",
+						"mathieuv",
+						"pro"
+					],
+					"port": "3630",
+					"path": [
+						"api",
+						"login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create Trip",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var data = pm.response.json()",
+							"",
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"pm.test(\"save last trip id created\", () => {",
+							"    pm.collectionVariables.set(\"idTrip\",data.id)",
+							"})",
+							"",
+							"pm.test(\"Data request is not empty\" , () => {",
+							"    pm.expect(data).to.not.be.empty",
+							"})"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"title\" : \"postmanTest\",\n    \"description\" : \"postmanTest\",\n    \"backgroundUrl\" : \"\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://levoyageur.mathieuv.pro:3630/api/user/{{idUser}}/trip",
+					"protocol": "http",
+					"host": [
+						"levoyageur",
+						"mathieuv",
+						"pro"
+					],
+					"port": "3630",
+					"path": [
+						"api",
+						"user",
+						"{{idUser}}",
+						"trip"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Modify last trip",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var data = pm.response.json()",
+							"",
+							"",
+							"pm.test(\"Status code is 201\", function () {",
+							"    pm.response.to.have.status(201);",
+							"});",
+							"",
+							"pm.test(\"Title is the right one\", () => {",
+							"    pm.expect(data.title).to.eql(\"postman modifié\")",
+							"})",
+							"",
+							"pm.test(\"Description is the right one\", () => {",
+							"    pm.expect(data.description).to.eql(\"postman modifié\")",
+							"})",
+							"",
+							"pm.test(\"save changes in environnement\", () => {",
+							"    pm.environment.set(\"lastTripTitle\", data.title)",
+							"    pm.environment.set(\"lastTripDescription\", data.description)",
+							"",
+							"})"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"title\" : \"postman modifié\",\n    \"description\" : \"postman modifié\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://levoyageur.mathieuv.pro:3630/api/user/{{idUser}}/trip/{{idTrip}}",
+					"protocol": "http",
+					"host": [
+						"levoyageur",
+						"mathieuv",
+						"pro"
+					],
+					"port": "3630",
+					"path": [
+						"api",
+						"user",
+						"{{idUser}}",
+						"trip",
+						"{{idTrip}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create Step in last trip",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var data = pm.response.json()",
+							"",
+							"pm.test(\"Status code is 201\", function () {",
+							"    pm.response.to.have.status(201);",
+							"});",
+							"",
+							"pm.test( \"Save id last step created\", () => {",
+							"    pm.collectionVariables.set(\"idStep1\", data.id)",
+							"})",
+							"",
+							"pm.test(\"Data request is not empty\" , () => {",
+							"    pm.expect(data).to.not.be.empty",
+							"})",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"longitude\" : \"0.0\",\n    \"latitude\" : \"0.0\",\n    \"title\": \"postman step\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://levoyageur.mathieuv.pro:3630/api/user/{{idUser}}/trip/{{idTrip}}/step",
+					"protocol": "http",
+					"host": [
+						"levoyageur",
+						"mathieuv",
+						"pro"
+					],
+					"port": "3630",
+					"path": [
+						"api",
+						"user",
+						"{{idUser}}",
+						"trip",
+						"{{idTrip}}",
+						"step"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create Step2 in last trip",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var data = pm.response.json()",
+							"",
+							"pm.test(\"Status code is 201\", function () {",
+							"    pm.response.to.have.status(201);",
+							"});",
+							"",
+							"pm.test( \"Save id last step created\", () => {",
+							"    pm.collectionVariables.set(\"idStep2\", data.id)",
+							"})",
+							"",
+							"pm.test(\"Data request is not empty\" , () => {",
+							"    pm.expect(data).to.not.be.empty",
+							"})",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"longitude\" : \"0.0\",\n    \"latitude\" : \"0.0\",\n    \"title\": \"postman step\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://levoyageur.mathieuv.pro:3630/api/user/{{idUser}}/trip/{{idTrip}}/step",
+					"protocol": "http",
+					"host": [
+						"levoyageur",
+						"mathieuv",
+						"pro"
+					],
+					"port": "3630",
+					"path": [
+						"api",
+						"user",
+						"{{idUser}}",
+						"trip",
+						"{{idTrip}}",
+						"step"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get all rides",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var data = pm.response.json()",
+							"",
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"pm.test(\"Response is not empty array\", () => {",
+							"    pm.expect(data).to.not.be.empty",
+							"})",
+							"",
+							"pm.test(\"Data request is not empty\" , () => {",
+							"    pm.expect(data).to.not.be.empty",
+							"})"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://levoyageur.mathieuv.pro:3630/api/user/{{idUser}}/trip/{{idTrip}}/ride",
+					"protocol": "http",
+					"host": [
+						"levoyageur",
+						"mathieuv",
+						"pro"
+					],
+					"port": "3630",
+					"path": [
+						"api",
+						"user",
+						"{{idUser}}",
+						"trip",
+						"{{idTrip}}",
+						"ride"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Modify last step",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var data = pm.response.json()",
+							"",
+							"pm.test(\"Status code is 201 (step created)\", function () {",
+							"    pm.response.to.have.status(201);",
+							"});",
+							"",
+							"pm.test(\"Data request is not empty\" , () => {",
+							"    pm.expect(data).to.not.be.empty",
+							"})"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"title\": \"postman modified step\",\n    \"duration\" : 2\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://levoyageur.mathieuv.pro:3630/api/user/{{idUser}}/trip/{{idTrip}}/step/{{idStep2}}",
+					"protocol": "http",
+					"host": [
+						"levoyageur",
+						"mathieuv",
+						"pro"
+					],
+					"port": "3630",
+					"path": [
+						"api",
+						"user",
+						"{{idUser}}",
+						"trip",
+						"{{idTrip}}",
+						"step",
+						"{{idStep2}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Days from last step created",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var data = pm.response.json()",
+							"",
+							"pm.test(\" Response code is 200\" , () => {",
+							"    pm.response.to.have.status(200)",
+							"})",
+							"",
+							"pm.test(\"Save last day finded\", () => {",
+							"    pm.collectionVariables.set(\"idDay\", data[ data.length - 1 ].id)",
+							"})",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://levoyageur.mathieuv.pro:3630/api/user/{{idUser}}/trip/{{idTrip}}/step/{{idStep2}}/day",
+					"protocol": "http",
+					"host": [
+						"levoyageur",
+						"mathieuv",
+						"pro"
+					],
+					"port": "3630",
+					"path": [
+						"api",
+						"user",
+						"{{idUser}}",
+						"trip",
+						"{{idTrip}}",
+						"step",
+						"{{idStep2}}",
+						"day"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create poi from last trip",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var data = pm.response.json()",
+							"",
+							"pm.test(\"Status code is 201\", function () {",
+							"    pm.response.to.have.status(201);",
+							"});",
+							"",
+							"pm.test(\"Save created poi id\", () => {",
+							"    pm.collectionVariables.set(\"idPoi\",data.id)",
+							"})",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"latitude\" : \"0.0\",\n    \"longitude\" : \"0.0\",\n    \"title\" : \"postman poi\",\n    \"description\": \"postman description\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://levoyageur.mathieuv.pro:3630/api/user/{{idUser}}/trip/{{idTrip}}/poi",
+					"protocol": "http",
+					"host": [
+						"levoyageur",
+						"mathieuv",
+						"pro"
+					],
+					"port": "3630",
+					"path": [
+						"api",
+						"user",
+						"{{idUser}}",
+						"trip",
+						"{{idTrip}}",
+						"poi"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Add a poi to a day",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 201\", function () {",
+							"    pm.response.to.have.status(201);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"dayId\": {{idDay}}\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://levoyageur.mathieuv.pro:3630/api/user/{{idUser}}/trip/{{idTrip}}/poi/{{idPoi}}",
+					"protocol": "http",
+					"host": [
+						"levoyageur",
+						"mathieuv",
+						"pro"
+					],
+					"port": "3630",
+					"path": [
+						"api",
+						"user",
+						"{{idUser}}",
+						"trip",
+						"{{idTrip}}",
+						"poi",
+						"{{idPoi}}"
+					],
+					"query": [
+						{
+							"key": "dayId",
+							"value": "{{idDay}}",
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get day with eager pois",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var data = pm.response.json()",
+							"",
+							"pm.test(\"Data request is not empty\" , () => {",
+							"    pm.expect(data.Pois.length).to.not.eql(0)",
+							"})",
+							"",
+							"console.log(data.Pois)"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://levoyageur.mathieuv.pro:3630/api/user/{{idUser}}/trip/{{idTrip}}/step/{{idStep2}}/day/{{idDay}}",
+					"protocol": "http",
+					"host": [
+						"levoyageur",
+						"mathieuv",
+						"pro"
+					],
+					"port": "3630",
+					"path": [
+						"api",
+						"user",
+						"{{idUser}}",
+						"trip",
+						"{{idTrip}}",
+						"step",
+						"{{idStep2}}",
+						"day",
+						"{{idDay}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete last poi",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 201\", function () {",
+							"    pm.response.to.have.status(201);",
+							"});",
+							"",
+							"pm.test(\"Safe delete poi registered\", () => {",
+							"    pm.collectionVariables.unset(\"idPoi\")",
+							"})"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "http://levoyageur.mathieuv.pro:3630/api/user/{{idUser}}/trip/{{idTrip}}/poi/{{idPoi}}",
+					"protocol": "http",
+					"host": [
+						"levoyageur",
+						"mathieuv",
+						"pro"
+					],
+					"port": "3630",
+					"path": [
+						"api",
+						"user",
+						"{{idUser}}",
+						"trip",
+						"{{idTrip}}",
+						"poi",
+						"{{idPoi}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete Step1",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 201\", function () {",
+							"    pm.response.to.have.status(201);",
+							"});",
+							"",
+							"pm.test(\"Safe delete step1 registered\", () => {",
+							"    pm.collectionVariables.unset(\"idStep1\")",
+							"})"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "http://levoyageur.mathieuv.pro:3630/api/user/{{idUser}}/trip/{{idTrip}}/step/{{idStep1}}",
+					"protocol": "http",
+					"host": [
+						"levoyageur",
+						"mathieuv",
+						"pro"
+					],
+					"port": "3630",
+					"path": [
+						"api",
+						"user",
+						"{{idUser}}",
+						"trip",
+						"{{idTrip}}",
+						"step",
+						"{{idStep1}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete Step2",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 201\", function () {",
+							"    pm.response.to.have.status(201);",
+							"});",
+							"",
+							"pm.test(\"Safe delete step2 registered\", () => {",
+							"    pm.collectionVariables.unset(\"idStep2\")",
+							"})"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "http://levoyageur.mathieuv.pro:3630/api/user/{{idUser}}/trip/{{idTrip}}/step/{{idStep2}}",
+					"protocol": "http",
+					"host": [
+						"levoyageur",
+						"mathieuv",
+						"pro"
+					],
+					"port": "3630",
+					"path": [
+						"api",
+						"user",
+						"{{idUser}}",
+						"trip",
+						"{{idTrip}}",
+						"step",
+						"{{idStep2}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete last trip",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 201\", function () {",
+							"    pm.response.to.have.status(201);",
+							"});",
+							"",
+							"pm.test(\"Safe delete trip registered\", () => {",
+							"    pm.collectionVariables.unset(\"idTrip\")",
+							"})"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "http://levoyageur.mathieuv.pro:3630/api/user/{{idUser}}/trip/{{idTrip}}",
+					"protocol": "http",
+					"host": [
+						"levoyageur",
+						"mathieuv",
+						"pro"
+					],
+					"port": "3630",
+					"path": [
+						"api",
+						"user",
+						"{{idUser}}",
+						"trip",
+						"{{idTrip}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete user",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(201);",
+							"});",
+							"",
+							"pm.test(\"Safe delete user registered\", () => {",
+							"    pm.collectionVariables.unset(\"idUser\")",
+							"})",
+							"",
+							"pm.test(\"Safe delete user registered\", () => {",
+							"    pm.collectionVariables.unset(\"idDay\")",
+							"})",
+							"",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://levoyageur.mathieuv.pro:3630/api/user/{{idUser}}",
+					"protocol": "http",
+					"host": [
+						"levoyageur",
+						"mathieuv",
+						"pro"
+					],
+					"port": "3630",
+					"path": [
+						"api",
+						"user",
+						"{{idUser}}"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"auth": {
+		"type": "bearer",
+		"bearer": [
+			{
+				"key": "token",
+				"value": "{{token}}",
+				"type": "string"
+			}
+		]
+	},
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "token",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "idRide",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "username",
+			"value": "postmanTest",
+			"type": "string"
+		},
+		{
+			"key": "password",
+			"value": "postmanTest",
+			"type": "string"
+		},
+		{
+			"key": "idUser",
+			"value": ""
+		},
+		{
+			"key": "idTrip",
+			"value": ""
+		},
+		{
+			"key": "idStep1",
+			"value": ""
+		},
+		{
+			"key": "idStep2",
+			"value": ""
+		},
+		{
+			"key": "idDay",
+			"value": ""
+		},
+		{
+			"key": "idPoi",
+			"value": ""
+		}
+	]
+}
