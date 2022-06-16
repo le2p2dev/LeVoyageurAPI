@@ -77,7 +77,7 @@ app.use(
 		poiMiddleware.loadPoi(req, res, next);
 	}
 );
-console.log(path.join(__dirname, "images"));
+
 app.use("/images", express.static(path.join(__dirname, "../images")));
 
 //************ Import des routes ************//
