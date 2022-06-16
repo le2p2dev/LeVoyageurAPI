@@ -5,6 +5,7 @@ module.exports = (sequelize) => {
 		static associate(db) {
 			Ride.belongsTo(db.Step, { as: "stepStart", foreignKey: "startStep" });
 			Ride.belongsTo(db.Step, { as: "stepEnd", foreignKey: "endStep" });
+			Ride.hasMany(db.File, { onDelete: "CASCADE" });
 		}
 	}
 

@@ -2,7 +2,12 @@ const db = require("../models");
 
 module.exports = {
   async loadRide(req, res, next) {
-    const ride = await db.Ride.findByPk(req.params.rideId);
+    const ride = await db.Ride.findAll({
+			where: {
+				order: req.params.rideId,
+				TripId: req.params.tripId,
+			},
+		});
 
     if (!ride) {
       const error = new Error("Ride not found");
