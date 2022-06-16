@@ -73,6 +73,10 @@
 							"    pm.expect(jsonData.token).to.not.be.undefined",
 							"})",
 							"",
+							"pm.test(\"Data request is not empty\" , () => {",
+							"    pm.expect(jsonData).to.not.be.empty",
+							"})",
+							"",
 							"pm.test(\"set token & user id variable\", () => {",
 							"    pm.collectionVariables.set(\"token\", jsonData.token)   ",
 							"    pm.collectionVariables.set(\"idUser\", jsonData.userId) ",
@@ -128,6 +132,10 @@
 							"",
 							"pm.test(\"save last trip id created\", () => {",
 							"    pm.collectionVariables.set(\"idTrip\",data.id)",
+							"})",
+							"",
+							"pm.test(\"Data request is not empty\" , () => {",
+							"    pm.expect(data).to.not.be.empty",
 							"})"
 						],
 						"type": "text/javascript"
@@ -245,6 +253,10 @@
 							"pm.test( \"Save id last step created\", () => {",
 							"    pm.collectionVariables.set(\"idStep1\", data.id)",
 							"})",
+							"",
+							"pm.test(\"Data request is not empty\" , () => {",
+							"    pm.expect(data).to.not.be.empty",
+							"})",
 							""
 						],
 						"type": "text/javascript"
@@ -300,6 +312,10 @@
 							"pm.test( \"Save id last step created\", () => {",
 							"    pm.collectionVariables.set(\"idStep2\", data.id)",
 							"})",
+							"",
+							"pm.test(\"Data request is not empty\" , () => {",
+							"    pm.expect(data).to.not.be.empty",
+							"})",
 							""
 						],
 						"type": "text/javascript"
@@ -354,6 +370,10 @@
 							"",
 							"pm.test(\"Response is not empty array\", () => {",
 							"    pm.expect(data).to.not.be.empty",
+							"})",
+							"",
+							"pm.test(\"Data request is not empty\" , () => {",
+							"    pm.expect(data).to.not.be.empty",
 							"})"
 						],
 						"type": "text/javascript"
@@ -391,9 +411,15 @@
 					"listen": "test",
 					"script": {
 						"exec": [
+							"var data = pm.response.json()",
+							"",
 							"pm.test(\"Status code is 201 (step created)\", function () {",
 							"    pm.response.to.have.status(201);",
-							"});"
+							"});",
+							"",
+							"pm.test(\"Data request is not empty\" , () => {",
+							"    pm.expect(data).to.not.be.empty",
+							"})"
 						],
 						"type": "text/javascript"
 					}
@@ -580,6 +606,57 @@
 						"{{idTrip}}",
 						"poi",
 						"{{idPoi}}"
+					],
+					"query": [
+						{
+							"key": "dayId",
+							"value": "{{idDay}}",
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get day with eager pois",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var data = pm.response.json()",
+							"",
+							"pm.test(\"Data request is not empty\" , () => {",
+							"    pm.expect(data.Pois).to.not.be.empty",
+							"})"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://levoyageur.mathieuv.pro:3630/api/user/{{idUser}}/trip/{{idTrip}}/step/{{idStep2}}/day/{{idDay}}",
+					"protocol": "http",
+					"host": [
+						"levoyageur",
+						"mathieuv",
+						"pro"
+					],
+					"port": "3630",
+					"path": [
+						"api",
+						"user",
+						"{{idUser}}",
+						"trip",
+						"{{idTrip}}",
+						"step",
+						"{{idStep2}}",
+						"day",
+						"{{idDay}}"
 					]
 				}
 			},
@@ -865,6 +942,30 @@
 			"key": "password",
 			"value": "postmanTest",
 			"type": "string"
+		},
+		{
+			"key": "idUser",
+			"value": ""
+		},
+		{
+			"key": "idTrip",
+			"value": ""
+		},
+		{
+			"key": "idStep1",
+			"value": ""
+		},
+		{
+			"key": "idStep2",
+			"value": ""
+		},
+		{
+			"key": "idDay",
+			"value": ""
+		},
+		{
+			"key": "idPoi",
+			"value": ""
 		}
 	]
 }
