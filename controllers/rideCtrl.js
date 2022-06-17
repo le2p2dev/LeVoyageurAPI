@@ -17,33 +17,53 @@ module.exports = {
 		res.status(200).send(req.ride);
 	},
 
-	async create(req, res, next) {
-		// if (!req.body.startStep || !req.body.endStep)
-		//   return res.status(406).send("Start step or end step missing");
+	async addUserFile(req, res, next) {
+		if (!req.file) {
+			return res.status(406).send("Image required");
+		}
 
-		// const step = await db.Step.findAll({
-		//   where: {
-		//     [Op.or]: [{ id: req.body.startStep }, { id: req.body.endStep }],
-		//   },
-		// });
+		const data = await db.File.findOne({
+			where: {
+				imageUrl: `${req.protocol}://${req.get("host")}/images/${
+					req.file.filename
+				}`,
+			},
+		});
 
-		// if (!step) {
-		//   return res.status(404).send("no step found");
-		// }
+		if (data) {
+			return res.status(409).send("File already exist for this user");
+		}
 
-		// try {
-		//   const data = await db.Ride.create({
-		//     startStep: req.body.startStep,
-		//     endStep: req.body.endStep,
-		//   });
+		const file = await db.File.create({
+			imageUrl: `${req.protocol}://${req.get("host")}/images/${
+				req.file.filename
+			}`,
+		});
 
-		//   return res.status(201).send(data);
-		// } catch (err) {
-		//   const error = new Error(err);
-		//   error.code = 500;
-		//   next(error);
-		// }
-		const nbData = await db.Ride.count({ where: { TripId: req.trip.id } });
-		console.log(nbData);
+		await req.user.addFiles(file);
+		await req.trip.addFiles(file);
+
+		return res.status(200).send(file);
+	},
+
+	async deleteFile(req, res, next) {
+		if (!req.params.idFile) {
+			return res.status(406).send("fileId required");
+		}
+
+		const data = await db.File.findByPk(req.params.fileId);
+
+		if (!data) {
+			return res.status(404).send("No file found");
+		}
+
+		await data.destroy();
+
+		const filename = data.imageUrl.split("/images/")[1];
+		fs.unlink(`images/${filename}`, (err) => {
+			if (err) console.log(err);
+		});
+
+		return res.status(201).send("file successfully deleted");
 	},
 };
