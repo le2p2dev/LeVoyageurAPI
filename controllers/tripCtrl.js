@@ -154,7 +154,7 @@ module.exports = {
 
 		const filename = data.imageUrl.split("/images/")[1];
 		fs.unlink(`images/${filename}`, (err) => {
-			if (err) console.log(err);
+			if (err) return res.status(500).send(err);
 		});
 
 		return res.status(201).send("file successfully deleted");
