@@ -7,6 +7,7 @@ module.exports = {
 				order: req.params.rideId,
 				TripId: req.params.tripId,
 			},
+			include: db.File,
 		});
 
     if (!ride) {

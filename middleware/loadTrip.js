@@ -2,7 +2,9 @@ const db = require("../models");
 
 module.exports = {
   async loadTrip(req, res, next) {
-    const trip = await db.Trip.findByPk(req.params.tripId);
+    const trip = await db.Trip.findByPk(req.params.tripId, {
+			include: db.File,
+		});
 
 		if (!trip) {
 			const error = new Error("Trip not found");
