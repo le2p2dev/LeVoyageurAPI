@@ -6,7 +6,7 @@ module.exports = {
 	},
 
 	async getById(req, res, next) {
-		res.send(await req.poi);
+		res.status(200).send(await req.poi);
 	},
 
 	async getByDay(req, res, next) {
@@ -18,7 +18,7 @@ module.exports = {
 	},
 
 	async getByTrip(req, res, next) {
-		return res.status(200).send(await req.trip.getPois());
+		return res.status(200).send(await req.trip.getPois({ include: db.File }));
 	},
 
 	async create(req, res, next) {
@@ -124,7 +124,7 @@ module.exports = {
 		});
 
 		if (data) {
-			return res.status(409).send("File already exist for this trip");
+			return res.status(409).send("File already exist for this poi");
 		}
 
 		const file = await db.File.create({
