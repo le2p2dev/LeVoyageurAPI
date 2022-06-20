@@ -37,8 +37,6 @@ module.exports = {
 
 		if (req.body.username) req.user.username = req.body.username;
 
-		if (req.body.avatar) req.user.avatar = req.body.avatar;
-
 		try {
 			const newData = await req.user.save();
 			return res.status(201).send(newData);
@@ -105,7 +103,7 @@ module.exports = {
 		});
 		await req.user.addFiles(file);
 
-		return res.status(200).send(file);
+		return res.status(201).send(file);
 	},
 
 	async deleteFile(req, res, next) {
@@ -123,7 +121,7 @@ module.exports = {
 
 		const filename = data.imageUrl.split("/images/")[1];
 		fs.unlink(`images/${filename}`, (err) => {
-			if (err) console.log(err);
+			if (err) return res.status(500).send(err);
 		});
 
 		return res.status(201).send("file successfully deleted");
