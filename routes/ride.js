@@ -7,4 +7,9 @@ module.exports = [
 		method: "get",
 		func: [auth, rideCtrl.getAllByTrip],
 	},
+	{
+		url: "/api/user/:userId/trip/:tripId/ride/",
+		method: "put",
+		func: [auth, rideCtrl.getAllByTrip],
+	},
 ];
