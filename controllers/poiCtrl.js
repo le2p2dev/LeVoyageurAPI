@@ -59,12 +59,6 @@ module.exports = {
 		if (req.body.latitude) req.poi.latitude = req.body.latitude;
 		if (req.body.stepId) req.poi.StepId = req.body.stepId;
 
-		const day = await db.Day.findByPk(req.body.dayId);
-
-		if (!day) {
-			return res.status(404).send("No day found");
-		}
-
 		try {
 			req.poi.addDays(day);
 			const newData = await req.poi.save();
