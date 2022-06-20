@@ -1,4 +1,5 @@
 const db = require("../models/");
+const fs = require("fs");
 
 module.exports = {
 	async getAll(req, res, next) {
@@ -152,7 +153,7 @@ module.exports = {
 			return res.status(404).send("No file found");
 		}
 
-		const filename = data.imageUrl.split("/images/")[1];
+		const filename = await data.imageUrl.split("/images/")[1];
 
 		fs.unlink(`images/${filename}`, (err) => {
 			if (err) return res.status(500).send(err);
