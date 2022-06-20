@@ -107,7 +107,7 @@ module.exports = {
 	},
 
 	async deleteFile(req, res, next) {
-		if (!req.params.idFile) {
+		if (!req.params.fileId) {
 			return res.status(406).send("fileId required");
 		}
 

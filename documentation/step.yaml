@@ -117,8 +117,8 @@
         description: server error during the modify
   get:
     tags:
-    summary: get information of a specific step
       - Step
+    summary: get information of a specific step
     security:
       - bearerAuth: []
     parameters:
