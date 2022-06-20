@@ -152,13 +152,13 @@ module.exports = {
 			return res.status(404).send("No file found");
 		}
 
-		await data.destroy();
-
-		const filename = await data.imageUrl.split("/images/")[1];
+		const filename = data.imageUrl.split("/images/")[1];
 
 		fs.unlink(`images/${filename}`, (err) => {
 			if (err) return res.status(500).send(err);
 		});
+
+		await data.destroy();
 
 		return res.status(201).send("file successfully deleted");
 	},
