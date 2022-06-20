@@ -19,17 +19,12 @@ module.exports = [
 		func: [auth, stepCtrl.getById],
 	},
 	{
-		url: "/api/user/:userId/trip/:tripId/step/:stepId",
+		url: "/api/user/:id/trip/:tripId/step/:stepId",
 		method: "put",
 		func: [auth, stepCtrl.update],
 	},
 	{
-		url: "/api/user/:userId/trip/:tripId/step/:stepId",
-		method: "delete",
-		func: [auth, stepCtrl.delete],
-	},
-	{
-		url: "/api/user/:userId/trip/:tripId/step/:stepId",
+		url: "/api/user/:id/trip/:tripId/step/:stepId",
 		method: "delete",
 		func: [auth, stepCtrl.delete],
 	},
