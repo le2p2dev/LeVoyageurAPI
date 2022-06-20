@@ -19,6 +19,15 @@ const swaggerOptions = {
 			},
 			servers: ["http://localhost:3630/"],
 		},
+		securityDefinitions: {
+			bearerAuth: {
+				type: "apiKey",
+				name: "Authorization",
+				scheme: "bearer",
+				in: "header",
+				bearerFormat: "JWT",
+			},
+		},
 	},
 	apis: [`src/index.js`, `documentation/*.yaml`],
 };

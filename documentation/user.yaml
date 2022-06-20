@@ -1,0 +1,190 @@
+/api/signup:
+  post:
+    summary: create a new user
+    tags:
+      - User
+    parameters:
+      - name : username
+        description : username of the user
+        in: formData
+        type: string
+        required: true
+      - name : password
+        description : password of the user
+        in: formData
+        type: string
+        required: true
+    responses:
+      '201':
+        description: creation OK
+      '406':
+        description: user allready exist
+      '500':
+        description: sever error
+
+/api/login:
+  post:
+    summary: login
+    tags:
+      - User
+    parameters:
+      - name : username
+        description: username of the user
+        in: formData
+        required: true
+      - name: password
+        description: password of the username
+        in: formData
+        type: string
+        required: true
+    responses:
+        '401':
+          description: Unauthorized
+        '200':
+          description: OK
+        '500':
+          description: server error
+
+/api/user/{id}:
+  get:
+    summary: get all user information where the id match
+    tags:
+      - User
+    security:
+      - bearerAuth: []
+    parameters:
+      - name : id
+        description: id of the user who want to find
+        in: path
+        type: integer
+        required: true
+    responses:
+      '200': 
+        description: all trip belonging to the user
+      '404':
+        description: no user or trip find
+      '401':
+        description: you are not authorized to perform this action whiout token
+  put:
+    summary: alow update for the user profile
+    tags:
+      - User
+    security:
+      - bearerAuth: []
+    parameters:
+      - name: id
+        description: id of the user
+        in: path
+        type: integer
+        required: true
+      - name: currentPassword
+        description: current password of the user
+        in: formData
+        type: string
+        required: true
+      - name: password
+        description: new password for the user
+        in: formData
+        type: string
+        required: false
+      - name: username
+        description: new user name of the user
+        in: formData
+        type: string
+        required: false
+      - name: image
+        description: Avatar of the user
+        type: file
+        in: formData
+        required: false
+    responses:
+      '201': 
+        description: changement successfuly applied
+      '406':
+        description: somme required agrs are missing
+      '404':
+        description: no user found
+      '401':
+        description: token missing or current password not OK
+      '500':
+        description: server error, no modification applied
+  delete:
+    summary: delete an user
+    tags:
+      - User
+    security:
+      - bearerAuth: []
+    parameters:
+      - name: id
+        description: id of the user who want delete
+        in: path
+        type: integer
+        required: true
+    responses:
+      '201': 
+        description: user successfuly deleted
+      '404':
+        description: no user found
+      '500':
+        description: server error
+      
+/api/user/{id}/file:
+  post:
+    summary: allow to add a file to a user
+    tags:
+      - User
+      - File
+    security:
+      - bearerAuth: []
+    parameters:
+      - name: id
+        description: id of the user who want to add file
+        in: path
+        type: integer
+        required: true 
+      - name: image
+        description: file to add at the user
+        in: formData
+        type: file
+        required: true 
+    responses:
+      '201':
+        description: file successfuly add to the user
+      '404':
+        description: no user found
+      '406': 
+        description: an args is missing
+      '409':
+        description: file already exist for this user
+      '500':
+        description: server error
+
+
+/api/user/{id}/file/{fileId}:
+  delete:
+    summary: allow to remove a file from a user
+    tags:
+      - User
+      - File
+    security:
+      - bearerAuth: []
+    parameters:
+      - name: id
+        description: id of the user who want to remove file
+        in: path
+        type: integer
+        required: true 
+      - name: fileId
+        description: id of the file we wanted to remove
+        in: path
+        type: integer
+        required: true 
+    responses:
+      '201':
+        description: file successfuly remove from the user
+      '404':
+        description: no user or no file found
+      '406': 
+        description: an args is missing
+      '500':
+        description: server error
