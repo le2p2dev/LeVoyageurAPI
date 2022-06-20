@@ -1,5 +1,6 @@
 const db = require("../models/");
 const { Op } = require("sequelize");
+const fs = require("fs");
 
 module.exports = {
 	async getAll(res) {
