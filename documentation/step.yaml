@@ -1,111 +1,242 @@
-securityDefinitions:  
-  JWT:  
-    type: apiKey  
-    in: header  
-    name: JWT token 
-
-/api/step:
-  get:
-    tags:
-      - Step
-    responses:
-      '200': 
-        description: all step in database
-
-/api/step/{idStep}:
-  get:
-    tags:
-      - Step
-    parameters:
-      - in: path
-        name: idStep
-        type: integer
-    responses:
-      '200': 
-        description: all step in database where id eqal to the idStep
-      '404':
-        description: not step found with this id
-
 /api/user/{id}/trip/{tripId}/step:
-  get: 
-    tags:
-      - Step
-    security:
-      - JWT: []
-    parameters:
-      - in: path
-        name: id
-        type: integer
-      - in: path
-        name: tripId
-        type: integer
-    responses:
-      '200': 
-        description: all step belonging to the trip
-      '404':
-        description: no user or step find
-      '401':
-        description: you are not authorized to perform this action whiout token
   post:
+    summary: create a step, ride and ride
     tags:
       - Step
     security:
-      - JWT: []
+      - bearerAuth: []
     parameters:
       - name: id
+        description: id of the user
         in: path
         type: integer
+        required: true
       - name: tripId
+        description: id of the trip we search
         in: path
         type: integer
-      - name: stepId
-        in: path
-        type: integer
+        required: true
+      - name: longitude
+        description: latitude of the step, for map position
+        in: formData
+        type: float
+        required: true
+      - name: latitude
+        description: longitude of the step, for map position
+        in: formData
+        type: float
+        required: true
       - name: title
+        description: title of the step
         in: formData
         type: string
-        required: true
       - name: description
+        description: description of the step
         in: formData
         type: string
       - name: duration
+        description: duration of the step
         in: formData
+        type: string
+    responses:
+      '201':
+        description: step successfuly created
+      '404':
+        description: user or trip not found
+      '500':
+        description: server error during step creation
+  get:
+    summary: list all the step from the step
+    tags:
+      - Step
+    security:
+      - bearerAuth: []
+    parameters:
+      - name: id
+        description: id of the user
+        in: path
         type: integer
-      - name: longitude
-        in: formData
-        type: double
-      - name: latitude
-        in: formData
-        type: double
+        required: true
+      - name: tripId
+        description: id of the trip we search
+        in: path
+        type: integer
+        required: true
+    responses:
+      '200':
+        description: list of all the step from specific trip
+      '404':
+        description: user or trip not found
 
 /api/user/{id}/trip/{tripId}/step/{stepId}:
   put:
+    summary: modify a specific step
     tags:
       - Step
     security:
-      - JWT: []
+      - bearerAuth: []
     parameters:
       - name: id
+        description: id of the user
         in: path
         type: integer
+        required: true
       - name: tripId
+        description: id of the trip we search
         in: path
         type: integer
-      - name: stepId
-        in: path
-        type: integer
+        required: true
+      - name: longitude
+        description: latitude of the step, for map position
+        in: formData
+        type: float
+        required: true
+      - name: latitude
+        description: longitude of the step, for map position
+        in: formData
+        type: float
+        required: true
       - name: title
+        description: title of the step
         in: formData
         type: string
       - name: description
+        description: description of the step
         in: formData
         type: string
       - name: duration
+        description: duration of the step
         in: formData
+        type: string
+    responses:
+      '201':
+        description: step successfuly modify
+      '404':
+        description: user or trip not found
+      '500':
+        description: server error during the modify
+  get:
+    tags:
+    summary: get information of a specific step
+      - Step
+    security:
+      - bearerAuth: []
+    parameters:
+      - name: id
+        description: id of the user
+        in: path
         type: integer
-      - name: longitude
+        required: true
+      - name: tripId
+        description: id of the trip we search
+        in: path
+        type: integer
+        required: true
+      - name: stepId
+        description: id of the step who want to get
+        in: path
+        type: integer
+        required: true
+    responses:
+      '200':
+      '404':
+  delete:
+    tags:
+      - Step
+    security:
+      - bearerAuth: []
+    parameters:
+      - name: id
+        description: id of the user
+        in: path
+        type: integer
+        required: true
+      - name: tripId
+        description: id of the trip we search
+        in: path
+        type: integer
+        required: true
+      - name: stepId
+        description: id of the step who want to delete
+        in: path
+        type: integer
+        required: true
+    responses:
+      '200':
+        description: step successfuly deleted
+      '404':
+        description: user or trip not found
+
+/api/user/{id}/trip/{tripId}/step/{stepId}/file:
+  post:
+    tags:
+      - Step
+      - File
+    security:
+      - bearerAuth: []
+    parameters:
+      - name: id
+        description: id of the user
+        in: path
+        type: integer
+        required: true
+      - name: tripId
+        description: id of the trip we search
+        in: path
+        type: integer
+        required: true
+      - name: stepId
+        description: id of the step who want to add a file
+        in: path
+        type: integer
+        required: true
+      - name: image
+        description: file to add at the step
         in: formData
-        type: double
-      - name: latitude
-        in: formData
-        type: double
+        type: file
+        required: true
+    responses:
+      '201':
+        description: file successfuly add to the step
+      '404':
+        description: user, trip, step not found
+      '406':
+        description: args missing
+      '500':
+        description: error during the addition of the file   
+
+api/user/{id}/trip/{tripId}/step/{stepId}/file/{fileId}:
+  delete:
+    tags:
+      - Step
+      - File
+    security:
+      - bearerAuth: []
+    parameters:
+      - name: id
+        description: id of the user
+        in: path
+        type: integer
+        required: true
+      - name: tripId
+        description: id of the trip we search
+        in: path
+        type: integer
+        required: true
+      - name: stepId
+        description: id of the step who want to delete
+        in: path
+        type: integer
+        required: true
+      - name: fileId
+        description: id of the file who want to delete
+        in: path
+        type: integer
+        required: true
+    responses:
+      '201':
+        description: file successfuly delete from the step
+      '404':
+        description: user, trip, step, file not found
+      '500':
+        description: server error during the suppression
