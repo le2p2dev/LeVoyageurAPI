@@ -78,6 +78,11 @@ app.use(
 	}
 );
 
+app.use("/api/user/:id/trip/:tripId/journal", (req, res, next) => {
+	const journalMiddleware = require("../middleware/loadJournal");
+	journalMiddleware.loadJournal(req, res, next);
+});
+
 app.use("/images", express.static(path.join(__dirname, "../images")));
 
 //************ Import des routes ************//
