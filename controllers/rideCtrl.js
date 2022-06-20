@@ -1,4 +1,5 @@
 const db = require("../models/");
+const fs = require("fs");
 
 module.exports = {
 	async getAllByTrip(req, res, next) {
@@ -18,19 +19,22 @@ module.exports = {
 	},
 
 	async update(req, res, next) {
-		if (!req.ride) {
-			res.status(404);
+		const ride = await db.Ride.findByPk(req.params.rideId);
+
+		if (ride) {
+			res.status(404).send("No ride found");
 		}
+
 		if (req.body.travelType) {
-			req.ride.travelType = req.body.travelType;
+			ride.travelType = req.body.travelType;
 		}
 
 		if (req.body.estimation) {
-			req.ride.estimation = req.body.estimation;
+			ride.estimation = req.body.estimation;
 		}
 
 		try {
-			return res.status(201).send(await req.ride.save());
+			return res.status(201).send(await ride.save());
 		} catch (err) {
 			const error = new Error("Modification failed: " + err);
 			error.code = 500;
@@ -38,7 +42,7 @@ module.exports = {
 		}
 	},
 
-	async addUserFile(req, res, next) {
+	async addFile(req, res, next) {
 		if (!req.file) {
 			return res.status(406).send("Image required");
 		}
@@ -77,13 +81,14 @@ module.exports = {
 			return res.status(404).send("No file found");
 		}
 
-		await data.destroy();
-
 		const filename = data.imageUrl.split("/images/")[1];
 
 		fs.unlink(`images/${filename}`, (err) => {
-			if (err) console.log(err);
+			if (err)
+				return res.status(500).send("Cannot delete file from the server");
 		});
+
+		await data.destroy();
 
 		return res.status(201).send("file successfully deleted");
 	},
