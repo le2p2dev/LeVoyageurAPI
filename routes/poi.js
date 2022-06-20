@@ -44,6 +44,11 @@ module.exports = [
 		func: [auth, multer, poiCtrl.addFile],
 	},
 	{
+		url: "/api/user/:id/trip/:tripId/poi/:poiId/file/:fileId",
+		method: "post",
+		func: [auth, multer, poiCtrl.deleteFile],
+	},
+	{
 		url: "/api/user/:id/trip/:tripId/step/:stepId/poi/:poiId",
 		method: "put",
 		func: [auth, poiCtrl.deleteFromStep],
