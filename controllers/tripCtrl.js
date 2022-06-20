@@ -1,5 +1,6 @@
 const db = require("../models/");
 const file = require("../models/file");
+const fs = require("fs");
 
 module.exports = {
 	async getAll(req, res, next) {
