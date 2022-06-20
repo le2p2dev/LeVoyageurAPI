@@ -1,3 +1,4 @@
+const multer = require("../middleware/multer-config");
 const poiCtrl = require("../controllers/poiCtrl");
 const auth = require("../middleware/auth");
 
@@ -36,5 +37,15 @@ module.exports = [
 		url: "/api/user/:id/trip/:tripId/step/:stepId/poi/:poiId",
 		method: "put",
 		func: [auth, poiCtrl.deleteFromStep],
+	},
+	{
+		url: "/api/user/:id/trip/:tripId/step/:stepId/poi/:poiId/file",
+		method: "post",
+		func: [auth, multer, poiCtrl.addFile],
+	},
+	{
+		url: "/api/user/:id/trip/:tripId/step/:stepId/poi/:poiId/file/:fileId",
+		method: "delete",
+		func: [auth, multer, poiCtrl.deleteFile],
 	},
 ];
