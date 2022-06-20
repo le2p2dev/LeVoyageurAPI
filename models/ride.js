@@ -14,6 +14,12 @@ module.exports = (sequelize) => {
 			order: {
 				type: Sequelize.INTEGER,
 			},
+			travelType: {
+				type: Sequelize.STRING,
+			},
+			estimation: {
+				type: Sequelize.STRING,
+			},
 		},
 		{
 			sequelize,
