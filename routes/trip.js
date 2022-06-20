@@ -9,14 +9,14 @@ module.exports = [
 		func: [auth, multer, tripCtrl.create],
 	},
 	{
-		url: "/api/user/:id/trip/:idTrip",
-		method: "get",
-		func: [auth, tripCtrl.getById],
-	},
-	{
 		url: "/api/user/:id/trip/",
 		method: "get",
 		func: [auth, tripCtrl.getByUser],
+	},
+	{
+		url: "/api/user/:id/trip/:tripId",
+		method: "get",
+		func: [auth, tripCtrl.getById],
 	},
 	{
 		url: "/api/user/:id/trip/:tripId",
