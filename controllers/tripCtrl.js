@@ -1,5 +1,4 @@
 const db = require("../models/");
-const file = require("../models/file");
 const fs = require("fs");
 
 module.exports = {
@@ -71,6 +70,15 @@ module.exports = {
 			req.trip.startDate = req.body.startDate;
 		}
 
+		if (req.file) {
+			req.trip.backgroundUrl = `${req.protocol}://${req.get("host")}/images/${
+				req.file.filename
+			}`;
+
+			await req.trip.save();
+			// return res.status(201).send(newData);
+		}
+
 		if (req.body.newuser) {
 			const user = await db.User.findOne({
 				where: { username: req.body.newuser },
@@ -81,7 +89,6 @@ module.exports = {
 			}
 
 			await req.trip.addUsers(user);
-			return res.status(201).send("User succesfull added");
 		}
 
 		try {
