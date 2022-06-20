@@ -11,8 +11,17 @@ module.exports = (sequelize) => {
 
 	Journal.init(
 		{
+			title: {
+				type: Sequelize.STRING,
+			},
 			content: {
 				type: Sequelize.STRING,
+			},
+			creationDate: {
+				type: Sequelize.DATEONLY,
+			},
+			modificationDate: {
+				type: Sequelize.DATEONLY,
 			},
 		},
 		{

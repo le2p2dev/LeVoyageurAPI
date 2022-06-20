@@ -13,11 +13,11 @@ module.exports = [
 		method: "post",
 		func: [auth, journalCtrl.create],
 	},
-	// {
-	// 	url: "/api/user/:userId/trip/:tripId/ride/:rideId/file",
-	// 	method: "post",
-	// 	func: [auth, multer, rideCtrl.addFile],
-	// },
+	{
+		url: "/api/user/:userId/trip/:tripId/journal/:journalId",
+		method: "put",
+		func: [auth, multer, journalCtrl.update],
+	},
 	// {
 	// 	url: "/api/user/:userId/trip/:tripId/ride/:rideId/file/:fileId",
 	// 	method: "delete",
