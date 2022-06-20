@@ -159,7 +159,6 @@
       '500':
         description: server error
 
-
 /api/user/{id}/file/{fileId}:
   delete:
     summary: allow to remove a file from a user
