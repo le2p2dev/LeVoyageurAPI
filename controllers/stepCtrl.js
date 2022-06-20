@@ -91,10 +91,6 @@ module.exports = {
 	},
 
 	async update(req, res, next) {
-		if (!req.step) {
-			return res.status(404).send("No step found");
-		}
-
 		const beforeUp = req.step.duration;
 
 		if (req.body.title) req.step.title = req.body.title;
