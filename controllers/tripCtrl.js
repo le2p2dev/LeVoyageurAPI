@@ -17,10 +17,6 @@ module.exports = {
 	},
 
 	async create(req, res, next) {
-		if (!req.user) {
-			return res.status(404).send("User not found");
-		}
-
 		try {
 			const trip = await db.Trip.create({
 				title: req.body.title,
@@ -40,7 +36,7 @@ module.exports = {
 
 			await req.user.addTrips(trip);
 
-			return res.status(200).send(trip);
+			return res.status(201).send(trip);
 		} catch (err) {
 			const error = new Error(err);
 			error.code = 500;
@@ -162,7 +158,7 @@ module.exports = {
 		fs.unlink(`images/${filename}`, (err) => {
 			if (err) return res.status(500).send(err);
 		});
-		
+
 		await data.destroy();
 
 		return res.status(201).send("file successfully deleted");

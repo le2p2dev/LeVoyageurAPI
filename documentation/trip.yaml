@@ -1,94 +1,239 @@
-securityDefinitions:  
-  JWT:  
-    type: apiKey  
-    in: header  
-    name: Bearer
-
-/api/trip/:
-  get:
-    tags:
-      - Trip
-    responses:
-      '200': 
-        description: all trip in database
-
-/api/trip/{tripId}:
-  get:
-    tags:
-      - Trip
-    parameters:
-      - in: path
-        name: tripId
-        type: integer
-    responses:
-      '200': 
-        description: all trip in database where id eqal to the idTrip
-      '404':
-        description: not trip found with this id
-
-/api/user/{id}/trip/:
-  get: 
-    tags:
-      - Trip
-    security:
-      - JWT: []
-    parameters:
-      - in: path
-        name: id
-        type: integer
-    responses:
-      '200': 
-        description: all trip belonging to the user
-      '404':
-        description: no user or trip find
-      '401':
-        description: you are not authorized to perform this action whiout token
+/api/user/{id}/trip:
   post:
+    summary: create a trip
     tags:
       - Trip
     security:
-      - JWT: []
+      - bearerAuth: []
     parameters:
       - name: id
+        description: id of the user who create the trip, this is the owner
         in: path
         type: integer
-      - name: title
-        in: formData
-        type: string
         required: true
+      - name: title
+        description: title of the trip
+        in: formData
+        type: string
+        required: false
       - name: description
+        description: description of the trip who want to create
         in: formData
         type: string
-      - name: backgroundUrl
-        in: formData
-        type: string
+        required: false
       - name: startDate
+        description: date where the trip start 
         in: formData
         type: date
+        required: false
+      - name: image
+        description: image or document for the trip
+        in: formData
+        type: file
+        required: false
     responses:
       '201':
-        description: insertion ok
+        description: trip successfuly created
+      '404': 
+        description: user not found
+      '500':
+        description: error server during the trip creation    
+  get:
+    summary: get all trip from a user
+    tags:
+      - Trip
+    security:
+      - bearerAuth: []
+    parameters:
+      - name: id
+        description: id of the user where user participated
+        in: path
+        type: integer
+        required: true
+    responses:
+      '200':
+        description: list of all the trip where the user participated
+      '404':
+        description: user not found
 
 /api/user/{id}/trip/{tripId}:
   put:
+    summary: modify a trip from a user where id match with tripId
     tags:
       - Trip
     security:
-      - JWT: []
+      - bearerAuth: []
     parameters:
       - name: id
+        description: id of the user
         in: path
         type: integer
-      - name: title
-        in: formData
-        type: string
         required: true
+      - name: tripId
+        description: id of the trip we search
+        in: path
+        type: integer
+        required: true
+      - name: title
+        description: new title for the Trip
+        in: formData
+        type: string
       - name: description
+        description: new description for the Trip
         in: formData
         type: string
-      - name: backgroundUrl
+      - name: image
         in: formData
-        type: string
+        description: new background image
+        type: file
       - name: startDate
         in: formData
+        description: new date for the start of the trip
         type: date
+      - name: newuser
+        in: formData
+        description: name of the user who want to add at the trip
+        type: string
+    responses:
+      '201':
+        description: modification successfuly applied
+      '404':
+        description: user or trip not found
+      '500':
+        description: error during the trip modification
+  get:
+    summary: get a trip from a user where id match with tripId
+    tags:
+      - Trip
+    security:
+      - bearerAuth: []
+    parameters:
+      - name: id
+        description: id of the user
+        in: path
+        type: integer
+        required: true
+      - name: tripId
+        description: id of the trip we search
+        in: path
+        type: integer
+        required: true
+    responses:
+      '200': 
+        description: all information of the trip
+      '404':
+        description: user or trip not found
+  delete:
+    summary: delete a trip from a user where id match with tripId
+    tags:
+      - Trip
+    security:
+      - bearerAuth: []
+    parameters:
+      - name: id
+        description: id of the user
+        in: path
+        type: integer
+        required: true
+      - name: tripId
+        description: id of the trip we want to delete
+        in: path
+        type: integer
+        required: true
+    responses:
+      '201':
+        description: trip successfuly deleted
+      '404':
+        description: user or trip not found
+      '500':
+        description: error server during the suppression of the trip
+
+
+/api/user/{id}/trip/{tripId}/users:
+  get:
+    summary: get the list of the user form a specific trip
+    tags:
+      - Trip
+    security:
+      - bearerAuth: []
+    parameters:
+      - name: id
+        description: id of the user
+        in: path
+        type: integer
+        required: true
+      - name: tripId
+        description: id of the trip we want to delete
+        in: path
+        type: integer
+        required: true
+    responses:
+      '200':
+        description: list of all the user in specific Trip
+      '404':
+        description: user or trip not found
+
+/api/user/{id}/trip/{tripId}/file:
+  post:
+    summary: add a file to a specific trip
+    tags:
+      - Trip
+      - File
+    security:
+      - bearerAuth: []
+    parameters:
+      - name: id
+        description: id of the user
+        in: path
+        type: integer
+        required: true
+      - name: tripId
+        description: id of the trip we want to delete
+        in: path
+        type: integer
+        required: true
+      - name: image
+        description: file who want to add at the trip
+        in: formData
+        type: file
+        required: true
+    responses:
+      '201':
+        description: file successfuly add to the trip
+      '404':
+        description: user or trip not found
+      '409':
+        description: file allready exist for the trip
+      '500':
+        description: error server during the file add
+
+/api/user/{id}/trip/{tripId}/file/{fileId}:
+  delete:
+    summary: delete a specific file from a trip
+    tags:
+      - Trip
+      - File
+    security:
+      - bearerAuth: []
+      - name: id
+        description: id of the user
+        in: path
+        type: integer
+        required: true
+      - name: tripId
+        description: id of the trip we want to delete
+        in: path
+        type: integer
+        required: true
+      - name: fileId
+        description: id of the file who want deleted
+        in: path
+        type: integer
+        required: true
+    responses:
+      '201':
+        description: file successfuly deleted
+      '404':
+        description: user or trip not found
+      '500':
+        description: error server during the file suppression
