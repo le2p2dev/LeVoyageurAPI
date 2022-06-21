@@ -139,7 +139,9 @@
         required: true
     responses:
       '200':
+        description: specific step info's
       '404':
+        description: specific step not found
   delete:
     tags:
       - Step
