@@ -49,30 +49,16 @@ module.exports = {
 	},
 
 	async update(req, res, next) {
-		if (!req.trip.id) {
-			return res.status(404).send("No trip found");
-		}
-
 		if (req.body.title) {
 			req.trip.title = req.body.title;
 		}
+
 		if (req.body.description) {
 			req.trip.description = req.body.description;
 		}
-		if (req.body.backgroundUrl) {
-			req.trip.backgroundUrl = req.body.backgroundUrl;
-		}
+
 		if (req.body.startDate) {
 			req.trip.startDate = req.body.startDate;
-		}
-
-		if (req.file) {
-			req.trip.backgroundUrl = `${req.protocol}://${req.get("host")}/images/${
-				req.file.filename
-			}`;
-
-			await req.trip.save();
-			// return res.status(201).send(newData);
 		}
 
 		if (req.body.newuser) {
@@ -85,6 +71,12 @@ module.exports = {
 			}
 
 			await req.trip.addUsers(user);
+		}
+
+		if (req.file) {
+			req.trip.backgroundUrl = `${req.protocol}://${req.get("host")}/images/${
+				req.file.filename
+			}`;
 		}
 
 		try {
