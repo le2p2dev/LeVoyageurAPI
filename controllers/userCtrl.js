@@ -17,25 +17,25 @@ module.exports = {
 			return res.status(201).send(newData);
 		}
 
-		if (!req.body.currentPassword) {
-			return res.status(406).send("No current password");
-		}
-
-		const valid = await bcrypt.compare(
-			req.body.currentPassword,
-			req.user.password
-		);
-
-		if (!valid) {
-			return res.status(401).send("Invalid current password");
-		}
+		if (req.body.username) req.user.username = req.body.username;
 
 		if (req.body.password) {
+			if (!req.body.currentPassword) {
+				return res.status(406).send("No current password");
+			}
+
+			const valid = await bcrypt.compare(
+				req.body.currentPassword,
+				req.user.password
+			);
+
+			if (!valid) {
+				return res.status(401).send("Invalid current password");
+			}
+
 			const hashpassword = await bcrypt.hash(req.body.password, 10);
 			req.user.password = hashpassword;
 		}
-
-		if (req.body.username) req.user.username = req.body.username;
 
 		try {
 			const newData = await req.user.save();
