@@ -34,6 +34,11 @@ module.exports = [
 		func: [auth, poiCtrl.update],
 	},
 	{
+		url: "/api/user/:id/trip/:tripId/poi/:poiId",
+		method: "put",
+		func: [auth, poiCtrl.update],
+	},
+	{
 		url: "/api/user/:id/trip/:tripId/step/:stepId/poi/:poiId",
 		method: "delete",
 		func: [auth, poiCtrl.delete],
