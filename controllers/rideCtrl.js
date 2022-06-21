@@ -21,8 +21,8 @@ module.exports = {
 	async update(req, res, next) {
 		const ride = await db.Ride.findByPk(req.params.rideId);
 
-		if (ride) {
-			res.status(404).send("No ride found");
+		if (!ride) {
+			return res.status(404).send("No ride found");
 		}
 
 		if (req.body.travelType) {
