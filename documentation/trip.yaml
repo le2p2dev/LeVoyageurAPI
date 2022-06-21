@@ -82,10 +82,11 @@
         description: new description for the Trip
         in: formData
         type: string
-      - name: image
-        in: formData
-        description: new background image
-        type: file
+      # - name: image
+      #   in: formData
+      #   description: new background image
+      #   type: file
+      #   required: false
       - name: startDate
         in: formData
         description: new date for the start of the trip
