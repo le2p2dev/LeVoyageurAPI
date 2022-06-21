@@ -15,7 +15,7 @@ module.exports = [
 	},
 	{
 		url: "/api/user/:id/trip/:tripId/poi/:poiId",
-		method: "get",
+		method: "delete",
 		func: [auth, poiCtrl.delete],
 	},
 	{
