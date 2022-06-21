@@ -82,10 +82,14 @@
         type: integer
         required: true
       - name: tripId
-        description: id of the trip we search
+        description: id of the trip
         in: path
         type: integer
         required: true
+      - name: stepId
+        description: id of the step we search
+        type: integer
+        in: path
       - name: longitude
         description: latitude of the step, for map position
         in: formData
