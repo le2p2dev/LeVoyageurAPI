@@ -8,21 +8,21 @@ module.exports = [
 		method: "get",
 		func: [auth, poiCtrl.getByDay],
 	},
-	// {
-	// 	url: "/api/user/:id/trip/:tripId/poi/:poiId",
-	// 	method: "get",
-	// 	func: [auth, poiCtrl.getById],
-	// },
+	{
+		url: "/api/user/:id/trip/:tripId/poi/:poiId",
+		method: "get",
+		func: [auth, poiCtrl.getById],
+	},
 	{
 		url: "/api/user/:id/trip/:tripId/step/:stepId/poi",
 		method: "get",
 		func: [auth, poiCtrl.getByStep],
 	},
-	// {
-	// 	url: "/api/user/:id/trip/:tripId/poi",
-	// 	method: "get",
-	// 	func: [auth, poiCtrl.getByTrip],
-	// },
+	{
+		url: "/api/user/:id/trip/:tripId/poi",
+		method: "get",
+		func: [auth, poiCtrl.getByTrip],
+	},
 	{
 		url: "/api/user/:id/trip/:tripId/step/:stepId/poi",
 		method: "post",
@@ -38,16 +38,16 @@ module.exports = [
 		method: "delete",
 		func: [auth, poiCtrl.delete],
 	},
-	// {
-	// 	url: "/api/user/:id/trip/:tripId/poi/:poiId/file",
-	// 	method: "post",
-	// 	func: [auth, multer, poiCtrl.addFile],
-	// },
-	// {
-	// 	url: "/api/user/:id/trip/:tripId/poi/:poiId/file/:fileId",
-	// 	method: "delete",
-	// 	func: [auth, multer, poiCtrl.deleteFile],
-	// },
+	{
+		url: "/api/user/:id/trip/:tripId/poi/:poiId/file",
+		method: "post",
+		func: [auth, multer, poiCtrl.addFile],
+	},
+	{
+		url: "/api/user/:id/trip/:tripId/poi/:poiId/file/:fileId",
+		method: "delete",
+		func: [auth, multer, poiCtrl.deleteFile],
+	},
 	{
 		url: "/api/user/:id/trip/:tripId/step/:stepId/poi/:poiId",
 		method: "put",
