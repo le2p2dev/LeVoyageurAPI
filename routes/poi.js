@@ -14,6 +14,11 @@ module.exports = [
 		func: [auth, poiCtrl.getById],
 	},
 	{
+		url: "/api/user/:id/trip/:tripId/poi/",
+		method: "post",
+		func: [auth, poiCtrl.create],
+	},
+	{
 		url: "/api/user/:id/trip/:tripId/step/:stepId/poi",
 		method: "get",
 		func: [auth, poiCtrl.getByStep],
