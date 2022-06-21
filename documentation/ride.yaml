@@ -1,0 +1,130 @@
+/api/user/{id}/trip/{tripId}/ride:
+  get:
+    summary: get all ride from a trip
+    security:
+      - bearerAuth: []
+    tags:
+      - Ride
+    parameters:
+      - name: id
+        description: id of the user
+        in: path
+        type: integer
+        required: true
+      - name: tripId
+        description: id of the trip
+        in: path
+        type: integer
+        required: true
+    responses:
+      '200':
+        description: list of all the ride in the step
+      '404':
+        description: user, or trip not found
+
+/api/user/{id}/trip/{tripId}/ride/{rideId}:
+  put:
+    summary: get information of a specific ride
+    security:
+      - bearerAuth: []
+    tags:
+      - Ride
+    parameters:
+      - name: id
+        description: id of the user
+        in: path
+        type: integer
+        required: true
+      - name: tripId
+        description: id of the trip
+        in: path
+        type: integer
+        required: true
+      - name: rideId
+        description: id of the ride we search to modifiy
+        type: integer
+        in: path
+        required: true
+      - name: travelType
+      - name: estimation
+    responses:
+      '201':
+        description: ride successfuly update
+      '404':
+        description: user, trip, ride not found
+      '500':
+        description: error server during the update
+
+/api/user/{id}/trip/{tripId}/ride/{rideId}/file:
+  post:
+    summary: add file to a ride
+    security:
+      - bearerAuth: []
+    tags:
+      - Ride
+      - File
+    parameters:
+      - name: id
+        description: id of the user
+        in: path
+        type: integer
+        required: true
+      - name: tripId
+        description: id of the trip
+        in: path
+        type: integer
+        required: true
+      - name: rideId
+        description: id of the ride we search to modifiy
+        type: integer
+        in: path
+        required: true
+      - name: image
+        description: image or file we want to add 
+        type: file
+        in: formData
+        required: true
+    responses:
+      '201':
+        description: file successfuly add to the ride
+      '404':
+        description: user, trip, ride not found
+      '500':
+        description: error server during the add of the file
+
+/api/user/{id}/trip/{tripId}/ride/{rideId}/file/{fileId}:
+  delete:
+    summary: delete file from ride
+    security:
+      - bearerAuth: []
+    tags:
+      - Ride
+      - File
+    parameters:
+      - name: id
+        description: id of the user
+        in: path
+        type: integer
+        required: true
+      - name: tripId
+        description: id of the trip
+        in: path
+        type: integer
+        required: true
+      - name: rideId
+        description: id of the ride we search to modifiy
+        type: integer
+        in: path
+        required: true
+      - name: fileId
+        description: id of the file we want to deleted
+        type: integer
+        in: path
+        required: true
+    responses:
+      '201':
+        description: delete file from the ride
+      '404':
+        description: user, trip, ride, or file not found
+      '500':
+        description: server error during the delete of the file
