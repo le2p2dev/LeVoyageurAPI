@@ -20,7 +20,6 @@ module.exports = {
 		if (req.body.username) req.user.username = req.body.username;
 
 		if (req.body.password) {
-			/*
 			if (!req.body.currentPassword) {
 				return res.status(406).send("No current password");
 			}
@@ -32,9 +31,8 @@ module.exports = {
 
 			if (!valid) {
 				return res.status(401).send("Invalid current password");
-			}
-			*/
-
+	
+		}
 			const hashpassword = await bcrypt.hash(req.body.password, 10);
 			req.user.password = hashpassword;
 		}
