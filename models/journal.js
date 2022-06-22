@@ -15,7 +15,7 @@ module.exports = (sequelize) => {
 				type: Sequelize.STRING,
 			},
 			content: {
-				type: Sequelize.STRING,
+				type: Sequelize.TEXT("long"),
 			},
 			creationDate: {
 				type: Sequelize.DATEONLY,
