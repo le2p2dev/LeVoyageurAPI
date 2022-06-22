@@ -73,10 +73,8 @@ module.exports = {
 			await req.trip.addUsers(user);
 		}
 
-		if (req.file) {
-			req.trip.backgroundUrl = `${req.protocol}://${req.get("host")}/images/${
-				req.file.filename
-			}`;
+		if (req.body.backgroundUrl) {
+			req.trip.backgroundUrl = req.body.backgroundUrl;
 		}
 
 		try {
