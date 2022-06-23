@@ -1,0 +1,23 @@
+const { Sequelize } = require("sequelize");
+
+module.exports = (sequelize) => {
+	class Foo extends Sequelize.Model {
+		static associate(db) {
+		}
+	}
+
+	Foo.init(
+		{
+			bar: {
+				type: Sequelize.STRING,
+			},
+		},
+		{
+			sequelize,
+			modelName: "Foo",
+			timestamps: false,
+		}
+	);
+
+	return Foo;
+};
