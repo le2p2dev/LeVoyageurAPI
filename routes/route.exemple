@@ -1,0 +1,7 @@
+module.exports = [
+	{
+		url: "/api/foo/",
+		method: "YOUR METHOD HTTP",
+		func: [MIDDLEWARE_1, MIDDLEWARE_2, MIDDLEWARE_X, CONTROLLER.METHOD],
+	},
+];
